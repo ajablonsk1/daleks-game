@@ -9,6 +9,14 @@ public record Vector2d(int x, int y) {
                 this.y + position.getY());
     }
 
+    public Vector2d subtract(Vector2d position) {
+        return add(new Vector2d(-position.getX(), -position.getY()));
+    }
+
+    public Vector2d opposite() {
+        return new Vector2d(-x, -y);
+    }
+
     public Vector2d copy(){
         return new Vector2d(this.x, this.y);
     }

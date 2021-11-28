@@ -26,6 +26,5 @@ public class Engine {
     public void start(){
         board.getEntities().subscribe(Entity::onNext);
 //        this.collisionDetector.checkForCollisions();
-
     }
 }

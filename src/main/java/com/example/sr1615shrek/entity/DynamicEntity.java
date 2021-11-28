@@ -11,18 +11,31 @@ public abstract class DynamicEntity implements Entity {
 
     private Vector2d position;
 
+    private Vector2d lastPosition;
+
     private List<PositionObserver> observers = new LinkedList<>();
 
+    public DynamicEntity(Vector2d position) {
+        this.position = position;
+    }
 
     @Override
     public void onNext() {
         //TODO
     }
 
+    public void move(Vector2d vector2d) {
+        lastPosition = position.copy();
+        this.position = this.position.add(vector2d);
+        observers.forEach(observer -> observer.onPositionChange(this, lastPosition));
+    }
+
     public void move(Direction direction){
-        Vector2d oldPosition = this.position.copy();
-        this.position = this.position.add(direction.getVector());
-        observers.forEach(observer -> observer.onPositionChange(this, oldPosition));
+        move(direction.getVector());
+    }
+
+    public void moveBack() {
+        move(position.subtract(lastPosition).opposite());
     }
 
     public void addObserver(PositionObserver positionObserver){
@@ -37,5 +50,10 @@ public abstract class DynamicEntity implements Entity {
     @Override
     public void setPosition(Vector2d position) {
         this.position = position;
+    }
+
+    @Override
+    public EntityHierarchy getRank() {
+        return EntityHierarchy.DYNAMIC;
     }
 }
