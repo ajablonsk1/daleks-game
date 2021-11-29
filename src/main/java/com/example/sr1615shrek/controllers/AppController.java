@@ -23,7 +23,6 @@ public class AppController {
     }
 
     public void initBoardView() {
-        boardController.saySomething();
         Parent root = fxWeaver.loadView(BoardController.class);
         Scene scene = new Scene(root);
         stage.setScene(scene);

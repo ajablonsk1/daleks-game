@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfig {
 
     @Bean
-    public Board board(){
-        return new Board(40,80);
+    public Board board() {
+        return new Board(40, 80);
     }
 }
