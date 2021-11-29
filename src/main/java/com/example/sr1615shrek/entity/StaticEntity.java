@@ -13,9 +13,7 @@ public abstract class StaticEntity implements Entity{
         return position;
     }
 
-    public void move(){
+    public void move() {
         //DO NOTHING
     }
-
-
 }

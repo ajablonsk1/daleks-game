@@ -9,9 +9,24 @@ import com.example.sr1615shrek.test_models.StaticActiveEntityModel;
 import com.example.sr1615shrek.test_models.StaticPassiveEntityModel;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-class Sr1615ShrekApplicationTests {
+class Tests {
+
+    @Test
+    void getEntitiesTest(){
+        Entity staticPassiveEntity = new StaticPassiveEntityModel(new Vector2d(2, 2));
+        Entity dynamicEntity = new DynamicEntityModel(new Vector2d(2, 3));
+
+        Board board = new Board(10, 10);
+        board.addEntity(staticPassiveEntity);
+        board.addEntity(dynamicEntity);
+        List<Entity> entities = board.getEntities();
+        assertEquals(entities.get(0), staticPassiveEntity);
+        assertEquals(entities.get(1), dynamicEntity);
+    }
 
     @Test
     void solvePassiveEntityWithDynamicEntityCollisionTest(){

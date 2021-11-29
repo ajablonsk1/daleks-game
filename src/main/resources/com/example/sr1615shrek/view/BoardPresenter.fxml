@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.GridPane?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.sr1615shrek.controllers.BoardController"
+            fx:controller="com.example.sr1615shrek.view.BoardPresenter"
             prefHeight="500.0" prefWidth="500.0">
     <GridPane fx:id="grid">
     </GridPane>

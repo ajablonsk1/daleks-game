@@ -1,20 +1,11 @@
 package com.example.sr1615shrek;
 
-import com.example.sr1615shrek.controllers.AppController;
-import com.example.sr1615shrek.controllers.BoardController;
+import com.example.sr1615shrek.view.AppController;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.Observable;
-import javafx.beans.binding.MapBinding;
-import javafx.collections.ObservableMap;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import net.rgielen.fxweaver.core.FxWeaver;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
 
 public class JavafxGameApp extends Application {
 

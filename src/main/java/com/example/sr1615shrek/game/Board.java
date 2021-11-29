@@ -3,53 +3,46 @@ package com.example.sr1615shrek.game;
 import com.example.sr1615shrek.collisions.CollisionDetector;
 import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.position.Vector2d;
-import io.reactivex.rxjava3.core.Observable;
-import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Board implements PositionObserver {
 
-    private Observable<Entity> entities;
-
-    private final Map<Vector2d, List<Entity>> collisions = new HashMap<>();
+    private final Map<Vector2d, List<Entity>> entities = new HashMap<>();
 
     private final int height;
 
     private final int width;
 
-    private final CollisionDetector collisionDetector;
+    private CollisionDetector collisionDetector;
 
-    public Board(int height, int width) {
+    public Board(int width, int height) {
         this.height = height;
         this.width = width;
         this.collisionDetector = new CollisionDetector(this);
     }
+    
+    public List<Entity> getEntities(){
+        return this.entities.values().stream().flatMap(Collection::stream).toList();
+    }
 
-    public Observable<Entity> getEntities(){
-        return this.entities;
+    public void addEntity(Entity entity) {
+        if(entities.get(entity.getPosition()) == null) {
+            List<Entity> entities = new LinkedList<>();
+            this.entities.put(entity.getPosition(), entities);
+        }
+        entities.get(entity.getPosition()).add(entity);
+    }
+
+    public void removeEntityFromBoard(Entity entity) {
+        entities.get(entity.getPosition()).remove(entity);
     }
 
     @Override
     public void onPositionChange(Entity entity, Vector2d oldPosition) {
-        collisions.get(oldPosition).remove(entity);
+        entities.get(oldPosition).remove(entity);
         addEntity(entity);
-        collisionDetector.detectCollisions(collisions.get(entity.getPosition()));
-    }
-
-    public void addEntity(Entity entity) {
-        if(collisions.get(entity.getPosition()) == null) {
-            List<Entity> entities = new LinkedList<>();
-            collisions.put(entity.getPosition(), entities);
-        }
-        collisions.get(entity.getPosition()).add(entity);
-    }
-
-    public void removeEntityFromBoard(Entity entity) {
-        collisions.get(entity.getPosition()).remove(entity);
+        this.collisionDetector.detectCollisions(entities.get(entity.getPosition()));
     }
 
     public int getHeight() {
