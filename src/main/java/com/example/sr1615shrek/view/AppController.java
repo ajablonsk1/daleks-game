@@ -28,12 +28,15 @@ public class AppController {
         this.engine = engine;
     }
 
+    // Initializing the board view, which is the actual game view
     public void initBoardView() {
         Parent root = fxWeaver.loadView(BoardPresenter.class);
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-        engine.start(); //Does nothing for now
+
+        //Does nothing for now
+        engine.start();
     }
 
     public void setStage(Stage stage){

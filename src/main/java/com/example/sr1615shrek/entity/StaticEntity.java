@@ -1,6 +1,8 @@
 package com.example.sr1615shrek.entity;
 
+import com.example.sr1615shrek.entity.position.Direction;
 import com.example.sr1615shrek.entity.position.Vector2d;
+import com.example.sr1615shrek.game.PositionObserver;
 
 public abstract class StaticEntity implements Entity{
     private final Vector2d position;
@@ -13,7 +15,18 @@ public abstract class StaticEntity implements Entity{
         return position;
     }
 
-    public void move() {
-        //DO NOTHING
+    @Override
+    public void move(Direction direction) {
+        //DOES NOTHING
+    }
+
+    @Override
+    public void moveBack(){
+        //DOES NOTHING
+    }
+
+    @Override
+    public void addObserver(PositionObserver positionObserver){
+        //DOES NOTHING
     }
 }

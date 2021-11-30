@@ -17,11 +17,6 @@ public class StaticPassiveEntityModel extends StaticEntity {
     }
 
     @Override
-    public void move(Vector2d vector2d) {
-
-    }
-
-    @Override
     public void moveBack() {
 
     }
@@ -33,11 +28,6 @@ public class StaticPassiveEntityModel extends StaticEntity {
 
     @Override
     public void addObserver(PositionObserver positionObserver) {
-
-    }
-
-    @Override
-    public void onNext() {
 
     }
 

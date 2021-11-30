@@ -24,7 +24,7 @@ public class JavafxGameApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        AppController appController = applicationContext.getBean(AppController.class);
+        this.appController = applicationContext.getBean(AppController.class);
         appController.setStage(stage);
         appController.initBoardView();
     }

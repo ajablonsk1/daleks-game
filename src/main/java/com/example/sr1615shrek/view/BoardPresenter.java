@@ -35,9 +35,13 @@ public class BoardPresenter {
 
     private List<Entity> entities;
 
-    private Map<Vector2d, Tile> tiles = new HashMap<>();
+    private final Map<Vector2d, Tile> tiles = new HashMap<>();
 
+
+    // Setting the board with given game conditions
     public void setBoardGridPane(){
+
+        // Filling the board with tiles
         for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j < this.columns; j++) {
 
@@ -56,6 +60,9 @@ public class BoardPresenter {
                 tiles.put(new Vector2d(i, j), tile);
             }
         }
+
+
+        // Drawing existing entities in the start of the game
         this.entities.forEach(entity -> {
             if(entity.getRank() == EntityHierarchy.DYNAMIC) {
                 tiles.get(entity.getPosition()).drawD();

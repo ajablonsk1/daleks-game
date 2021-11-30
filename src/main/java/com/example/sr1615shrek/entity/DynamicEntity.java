@@ -19,11 +19,6 @@ public abstract class DynamicEntity implements Entity {
         this.position = position;
     }
 
-    @Override
-    public void onNext() {
-        //TODO
-    }
-
     public void move(Vector2d vector2d) {
         lastPosition = position.copy();
         this.position = this.position.add(vector2d);
@@ -38,6 +33,7 @@ public abstract class DynamicEntity implements Entity {
         move(position.subtract(lastPosition).opposite());
     }
 
+    //Adding an observer which will inform the board about position change
     public void addObserver(PositionObserver positionObserver){
         this.observers.add(positionObserver);
     }

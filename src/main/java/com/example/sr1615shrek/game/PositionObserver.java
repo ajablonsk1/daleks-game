@@ -5,5 +5,5 @@ import com.example.sr1615shrek.entity.position.Vector2d;
 
 public interface PositionObserver {
 
-    public void onPositionChange(Entity entity, Vector2d oldPosition);
+    void onPositionChange(Entity entity, Vector2d oldPosition);
 }

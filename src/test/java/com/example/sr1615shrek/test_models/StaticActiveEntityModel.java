@@ -18,16 +18,6 @@ public class StaticActiveEntityModel extends StaticEntity {
     }
 
     @Override
-    public void move(Vector2d vector2d) {
-
-    }
-
-    @Override
-    public void moveBack() {
-
-    }
-
-    @Override
     public void setPosition(Vector2d position) {
 
     }

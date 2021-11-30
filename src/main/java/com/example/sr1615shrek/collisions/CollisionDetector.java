@@ -18,6 +18,7 @@ public class CollisionDetector {
         this.board = board;
     }
 
+    // Detecting collision at the same vector
     public void detectCollisions(List<Entity> entitiesOnOnePosition){
         if(entitiesOnOnePosition.size() == 1) {
             Entity entity = entitiesOnOnePosition.get(0);
@@ -31,6 +32,8 @@ public class CollisionDetector {
         }
     }
 
+    /* Checking the entities (with collision) hierarchy
+       and call the valid function in collisionSolver */
     private void detectTwoEntitiesCollisionProblem(Entity firstEntity, Entity secondEntity){
         if(secondEntity.getRank().isMoreImportantThan(firstEntity.getRank())) {
             Entity tmpEntity = firstEntity;
@@ -46,10 +49,11 @@ public class CollisionDetector {
             this.collisionSolver.staticActiveEntityWithDynamicEntity(firstEntity, secondEntity);
         } else if(firstEntity.getRank() == EntityHierarchy.DYNAMIC
                 && secondEntity.getRank() == EntityHierarchy.DYNAMIC){
-            this.collisionSolver.DynamicEntityWithDynamicEntity(firstEntity, secondEntity);
+            this.collisionSolver.dynamicEntityWithDynamicEntity(firstEntity, secondEntity);
         }
     }
 
+    // Checking if entities didn't go off the map
     private boolean detectEntityOffTheMap(Vector2d entityPosition){
         return entityPosition.getX() < 0
                 || entityPosition.getY() < 0

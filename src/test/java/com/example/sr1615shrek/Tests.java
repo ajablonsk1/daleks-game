@@ -16,6 +16,18 @@ import static org.junit.jupiter.api.Assertions.*;
 class Tests {
 
     @Test
+    void vector2dTest(){
+        Vector2d vector2d1 = new Vector2d(2, 3);
+        Vector2d vector2d2 = new Vector2d(5, 8);
+
+        Vector2d addResult = vector2d1.add(vector2d2);
+        Vector2d subtractResult = vector2d1.subtract(vector2d2);
+
+        assertEquals(new Vector2d(7, 11), addResult);
+        assertEquals(new Vector2d(-3, -5), subtractResult);
+    }
+
+    @Test
     void getEntitiesTest(){
         Entity staticPassiveEntity = new StaticPassiveEntityModel(new Vector2d(2, 2));
         Entity dynamicEntity = new DynamicEntityModel(new Vector2d(2, 3));
@@ -24,8 +36,24 @@ class Tests {
         board.addEntity(staticPassiveEntity);
         board.addEntity(dynamicEntity);
         List<Entity> entities = board.getEntities();
-        assertEquals(entities.get(0), staticPassiveEntity);
-        assertEquals(entities.get(1), dynamicEntity);
+
+        assertEquals(staticPassiveEntity, entities.get(0));
+        assertEquals(dynamicEntity, entities.get(1));
+    }
+
+    @Test
+    void removeEntityFromTheBoardTest(){
+        Entity staticPassiveEntity = new StaticPassiveEntityModel(new Vector2d(2, 2));
+        Entity dynamicEntity = new DynamicEntityModel(new Vector2d(2, 3));
+
+        Board board = new Board(10, 10);
+        board.addEntity(staticPassiveEntity);
+        board.addEntity(dynamicEntity);
+
+        board.removeEntityFromBoard(staticPassiveEntity);
+
+        assertEquals(dynamicEntity, board.getEntities().get(0));
+        assertEquals(1, board.getEntities().size());
     }
 
     @Test

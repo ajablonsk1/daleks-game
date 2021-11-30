@@ -14,21 +14,21 @@ public class CollisionSolver {
     public void staticActiveEntityWithDynamicEntity(Entity dynamicEntity,
                                                     Entity staticActiveEntity) {
 
-        //DO SOMETHING, FOR EXAMPLE:
+        //SOLVE THE COLLISION, FOR EXAMPLE:
         board.removeEntityFromBoard(staticActiveEntity);
     }
 
     public void staticPassiveEntityWithDynamicEntity(Entity staticPassiveEntity,
                                                      Entity dynamicEntity){
 
-        //DO SOMETHING, FOR EXAMPLE:
+        //SOLVE THE COLLISION, FOR EXAMPLE:
         dynamicEntity.moveBack();
     }
 
-    public void DynamicEntityWithDynamicEntity(Entity firstDynamicEntity,
+    public void dynamicEntityWithDynamicEntity(Entity firstDynamicEntity,
                                                Entity secondDynamicEntity) {
 
-        //DO SOMETHING, FOR EXAMPLE:
+        //SOLVE THE COLLISION, FOR EXAMPLE:
         secondDynamicEntity.moveBack();
     }
 

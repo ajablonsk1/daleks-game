@@ -15,11 +15,15 @@ public class AppConfig {
 
     @Bean
     public Board board() throws IOException, ParseException {
+
+        //Configuration board width and height from the configuration file
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = (JSONObject) parser.parse
                 (new FileReader("src/main/resources/configuration.json"));
+
         int width = Integer.parseInt((String) jsonObject.get("width"));
         int height = Integer.parseInt((String) jsonObject.get("height"));
+
         return new Board(width, height);
     }
 }
