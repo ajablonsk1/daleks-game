@@ -13,17 +13,13 @@ public class AppController {
 
     private Stage stage;
 
-    FxWeaver fxWeaver;
+    private final FxWeaver fxWeaver;
 
-    BoardPresenter boardPresenter;
-
-    Engine engine;
+    private Engine engine;
 
     @Autowired
-    public AppController(BoardPresenter boardPresenter,
-                         FxWeaver fxWeaver,
+    public AppController(FxWeaver fxWeaver,
                          Engine engine){
-        this.boardPresenter = boardPresenter;
         this.fxWeaver = fxWeaver;
         this.engine = engine;
     }

@@ -1,12 +1,13 @@
 package com.example.sr1615shrek.game;
 
-import com.example.sr1615shrek.collisions.CollisionDetector;
+import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.position.Vector2d;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
 import java.util.*;
 
-public class Board implements PositionObserver {
+public class Board {
 
     private final Map<Vector2d, List<Entity>> entities = new HashMap<>();
 
@@ -14,25 +15,40 @@ public class Board implements PositionObserver {
 
     private final int width;
 
-    private final CollisionDetector collisionDetector;
+    private final BehaviorSubject<List<Entity>> subject = BehaviorSubject.create();
+
+    private final BehaviorSubject<DynamicEntity> entitySubject = BehaviorSubject.create();
 
     public Board(int width, int height) {
         this.height = height;
         this.width = width;
-        this.collisionDetector = new CollisionDetector(this);
+        this.entitySubject.subscribe(this::onEntityPositionChange);
     }
 
     public List<Entity> getEntities(){
-        return this.entities.values().stream().flatMap(Collection::stream).toList();
+        return this.entities
+                .values()
+                .stream()
+                .flatMap(Collection::stream)
+                .toList();
     }
 
     // Adding entity to map
     public void addEntity(Entity entity) {
-        if(entities.get(entity.getPosition()) == null) {
-            List<Entity> entities = new LinkedList<>();
-            this.entities.put(entity.getPosition(), entities);
-        }
-        entities.get(entity.getPosition()).add(entity);
+        this.entities.computeIfAbsent(entity.getPosition(), k -> new LinkedList<>());
+
+        this.entities.get(entity.getPosition()).add(entity);
+
+        this.subject.onNext(entities.get(entity.getPosition()));
+    }
+
+    public BehaviorSubject<List<Entity>> getSubject() {
+        return this.subject;
+    }
+
+    private void onEntityPositionChange(DynamicEntity dynamicEntity){
+        this.entities.get(dynamicEntity.getLastPosition()).remove(dynamicEntity);
+        addEntity(dynamicEntity);
     }
 
     // Removing entity from map
@@ -40,14 +56,6 @@ public class Board implements PositionObserver {
         entities.get(entity.getPosition()).remove(entity);
     }
 
-
-    // Changing the entity position in hashMap and checking if there is a collision
-    @Override
-    public void onPositionChange(Entity entity, Vector2d oldPosition) {
-        entities.get(oldPosition).remove(entity);
-        addEntity(entity);
-        this.collisionDetector.detectCollisions(entities.get(entity.getPosition()));
-    }
 
     public int getHeight() {
         return height;

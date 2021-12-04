@@ -15,9 +15,6 @@ public class Engine {
     public Engine(BoardPresenter boardPresenter, Board board){
         this.board = board;
         this.boardPresenter = boardPresenter;
-        boardPresenter.setData(board.getHeight(),
-                board.getWidth(),
-                board.getEntities());
     }
 
     public void start(){

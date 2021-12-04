@@ -2,7 +2,7 @@ package com.example.sr1615shrek.entity;
 
 import com.example.sr1615shrek.entity.position.Direction;
 import com.example.sr1615shrek.entity.position.Vector2d;
-import com.example.sr1615shrek.game.PositionObserver;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,16 +13,17 @@ public abstract class DynamicEntity implements Entity {
 
     private Vector2d lastPosition;
 
-    private List<PositionObserver> observers = new LinkedList<>();
+    private BehaviorSubject<DynamicEntity> positionSubject;
 
-    public DynamicEntity(Vector2d position) {
+    public DynamicEntity(Vector2d position, BehaviorSubject<DynamicEntity> positionSubject) {
         this.position = position;
+        this.positionSubject = positionSubject;
     }
 
     public void move(Vector2d vector2d) {
         lastPosition = position.copy();
         this.position = this.position.add(vector2d);
-        observers.forEach(observer -> observer.onPositionChange(this, lastPosition));
+        positionSubject.onNext(this);
     }
 
     public void move(Direction direction){
@@ -31,11 +32,6 @@ public abstract class DynamicEntity implements Entity {
 
     public void moveBack() {
         move(position.subtract(lastPosition).opposite());
-    }
-
-    //Adding an observer which will inform the board about position change
-    public void addObserver(PositionObserver positionObserver){
-        this.observers.add(positionObserver);
     }
 
     @Override
@@ -51,5 +47,9 @@ public abstract class DynamicEntity implements Entity {
     @Override
     public EntityHierarchy getRank() {
         return EntityHierarchy.DYNAMIC;
+    }
+
+    public Vector2d getLastPosition(){
+        return this.lastPosition;
     }
 }

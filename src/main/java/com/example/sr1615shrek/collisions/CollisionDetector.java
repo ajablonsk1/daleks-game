@@ -4,18 +4,24 @@ import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.EntityHierarchy;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import com.example.sr1615shrek.game.Board;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.function.Function;
 
+@Component
 public class CollisionDetector {
 
     private final CollisionSolver collisionSolver;
 
     private final Board board;
 
+    @Autowired
     public CollisionDetector(Board board){
         this.collisionSolver = new CollisionSolver(board);
         this.board = board;
+        this.board.getSubject().subscribe(this::detectCollisions);
     }
 
     // Detecting collision at the same vector

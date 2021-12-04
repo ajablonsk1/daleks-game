@@ -22,17 +22,14 @@ public class CollisionSolver {
                                                      Entity dynamicEntity){
 
         //SOLVE THE COLLISION, FOR EXAMPLE:
-        dynamicEntity.moveBack();
     }
 
     public void dynamicEntityWithDynamicEntity(Entity firstDynamicEntity,
                                                Entity secondDynamicEntity) {
 
         //SOLVE THE COLLISION, FOR EXAMPLE:
-        secondDynamicEntity.moveBack();
     }
 
     public void endOfMap(Entity entity){
-        entity.moveBack();
     }
 }

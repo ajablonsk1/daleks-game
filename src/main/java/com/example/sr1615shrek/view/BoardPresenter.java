@@ -3,6 +3,7 @@ package com.example.sr1615shrek.view;
 import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.EntityHierarchy;
 import com.example.sr1615shrek.entity.position.Vector2d;
+import com.example.sr1615shrek.game.Board;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
@@ -11,11 +12,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static java.lang.String.valueOf;
 
 @Controller
 @FxmlView
@@ -24,26 +28,30 @@ public class BoardPresenter {
     @FXML
     public GridPane grid;
 
+    private final Board board;
+
+    private final Map<Vector2d, Tile> tiles = new HashMap<>();
+
+    private List<Entity> entities;
+
     @FXML
     private void initialize(){
         setBoardGridPane();
     }
 
-    private int columns;
 
-    private int rows;
-
-    private List<Entity> entities;
-
-    private final Map<Vector2d, Tile> tiles = new HashMap<>();
-
+    @Autowired
+    public BoardPresenter(Board board){
+        this.board = board;
+        entities = board.getEntities();
+    }
 
     // Setting the board with given game conditions
     public void setBoardGridPane(){
 
         // Filling the board with tiles
-        for (int i = 0; i < this.rows; i++) {
-            for (int j = 0; j < this.columns; j++) {
+        for (int i = 0; i < board.getHeight(); i++) {
+            for (int j = 0; j < board.getWidth(); j++) {
 
                 Tile tile = new Tile(i, j);
 
@@ -74,7 +82,7 @@ public class BoardPresenter {
     }
 
     private static class Tile extends StackPane{
-        private Text text = new Text();
+        private final Text text = new Text();
 
         private final int x;
 
@@ -106,16 +114,8 @@ public class BoardPresenter {
         }
     }
 
-    //Set the starting game data
-    public void setData(int columns,
-                        int rows,
-                        List<Entity> entities){
-        this.columns = columns;
-        this.rows = rows;
-        this.entities = entities;
-    }
-
-    public void updateEntities(List<Entity> entities){
+    // Function to update the visualisation of entities
+    public void updateMap(List<Entity> entities){
         this.entities = entities;
     }
 }

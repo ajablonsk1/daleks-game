@@ -5,7 +5,7 @@
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.sr1615shrek.view.BoardPresenter"
-            prefHeight="500.0" prefWidth="500.0">
+            prefHeight="1000.0" prefWidth="1000.0">
     <GridPane fx:id="grid">
     </GridPane>
 </AnchorPane>
