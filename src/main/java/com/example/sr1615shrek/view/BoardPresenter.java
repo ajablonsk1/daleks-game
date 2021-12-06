@@ -1,7 +1,6 @@
 package com.example.sr1615shrek.view;
 
 import com.example.sr1615shrek.entity.Entity;
-import com.example.sr1615shrek.entity.EntityHierarchy;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import com.example.sr1615shrek.game.Board;
 import javafx.fxml.FXML;
@@ -52,15 +51,7 @@ public class BoardPresenter {
         // Filling the board with tiles
         for (int i = 0; i < board.getHeight(); i++) {
             for (int j = 0; j < board.getWidth(); j++) {
-
                 Tile tile = new Tile(i, j);
-
-                //JUST FOR VISUALISATION
-                if(i % 3 == 0 && j % 4 == 0){
-                    tile.drawD();
-                } else if(i % 4 == 0 && j % 5 == 0){
-                    tile.drawS();
-                }
 
                 tile.setTranslateX(j * 50);
                 tile.setTranslateY(i * 50);
@@ -69,16 +60,7 @@ public class BoardPresenter {
             }
         }
 
-
-        // Drawing existing entities in the start of the game
-        this.entities.forEach(entity -> {
-            if(entity.getRank() == EntityHierarchy.DYNAMIC) {
-                tiles.get(entity.getPosition()).drawD();
-            }
-            else{
-                tiles.get(entity.getPosition()).drawS();
-            }
-        });
+        updateMap(entities);
     }
 
     private static class Tile extends StackPane{
@@ -88,8 +70,8 @@ public class BoardPresenter {
 
         private final int y;
 
-        public Tile(int x, int y){
-            Rectangle rectangle = new Rectangle(50,50);
+        public Tile(int x, int y) {
+            Rectangle rectangle = new Rectangle(50, 50);
             rectangle.setFill(null);
             rectangle.setStroke(Color.BLACK);
 
@@ -98,11 +80,10 @@ public class BoardPresenter {
             this.x = x;
             this.y = y;
         }
-        private void drawS(){
-            text.setText("S");
-        }
-        private void drawD(){
-            text.setText("D");
+
+        // Drawing entities graphics (for now)
+        private void draw(Entity entity) {
+            text.setText(entity.getGraphics());
         }
 
         public int getX() {
@@ -117,5 +98,8 @@ public class BoardPresenter {
     // Function to update the visualisation of entities
     public void updateMap(List<Entity> entities){
         this.entities = entities;
+        this.entities.forEach(entity -> {
+            tiles.get(entity.getPosition()).draw(entity);
+        });
     }
 }

@@ -2,6 +2,7 @@ package com.example.sr1615shrek.entity;
 
 import com.example.sr1615shrek.entity.position.Direction;
 import com.example.sr1615shrek.entity.position.Vector2d;
+import com.example.sr1615shrek.entity.visitors.Visitor;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
 import java.util.LinkedList;
@@ -15,8 +16,12 @@ public abstract class DynamicEntity implements Entity {
 
     private BehaviorSubject<DynamicEntity> positionSubject;
 
+    //DEFAULT GRAPHIC FOR DYNAMIC ENTITY FOR NOW
+    private final String graphics = "D";
+
     public DynamicEntity(Vector2d position, BehaviorSubject<DynamicEntity> positionSubject) {
         this.position = position;
+        this.lastPosition = position;
         this.positionSubject = positionSubject;
     }
 
@@ -44,12 +49,12 @@ public abstract class DynamicEntity implements Entity {
         this.position = position;
     }
 
-    @Override
-    public EntityHierarchy getRank() {
-        return EntityHierarchy.DYNAMIC;
-    }
-
     public Vector2d getLastPosition(){
         return this.lastPosition;
+    }
+
+    @Override
+    public String getGraphics() {
+        return graphics;
     }
 }

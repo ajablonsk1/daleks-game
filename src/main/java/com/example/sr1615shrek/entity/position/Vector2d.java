@@ -1,8 +1,9 @@
 package com.example.sr1615shrek.entity.position;
 
+
 import java.util.Objects;
 
-public record Vector2d(int x, int y) {
+public record Vector2d(int x, int y){
 
     public Vector2d add(Vector2d position) {
         return new Vector2d(this.x + position.getX(),

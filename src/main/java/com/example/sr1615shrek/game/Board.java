@@ -15,14 +15,14 @@ public class Board {
 
     private final int width;
 
-    private final BehaviorSubject<List<Entity>> subject = BehaviorSubject.create();
+    private final BehaviorSubject<List<Entity>> collisionSubject = BehaviorSubject.create();
 
-    private final BehaviorSubject<DynamicEntity> entitySubject = BehaviorSubject.create();
+    private final BehaviorSubject<DynamicEntity> entityMoveSubject = BehaviorSubject.create();
 
     public Board(int width, int height) {
         this.height = height;
         this.width = width;
-        this.entitySubject.subscribe(this::onEntityPositionChange);
+        this.entityMoveSubject.subscribe(this::onEntityPositionChange);
     }
 
     public List<Entity> getEntities(){
@@ -39,11 +39,11 @@ public class Board {
 
         this.entities.get(entity.getPosition()).add(entity);
 
-        this.subject.onNext(entities.get(entity.getPosition()));
+        this.collisionSubject.onNext(entities.get(entity.getPosition()));
     }
 
-    public BehaviorSubject<List<Entity>> getSubject() {
-        return this.subject;
+    public BehaviorSubject<List<Entity>> getCollisionSubject() {
+        return this.collisionSubject;
     }
 
     private void onEntityPositionChange(DynamicEntity dynamicEntity){
@@ -56,13 +56,16 @@ public class Board {
         entities.get(entity.getPosition()).remove(entity);
     }
 
-
     public int getHeight() {
         return height;
     }
 
     public int getWidth() {
         return width;
+    }
+
+    public BehaviorSubject<DynamicEntity> getEntityMoveSubject() {
+        return entityMoveSubject;
     }
 }
 
