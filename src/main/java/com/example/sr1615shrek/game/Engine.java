@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class Engine {
 
-    private Board board;
+    private final Board board;
 
     private final BoardPresenter boardPresenter;
 
-    private CollisionDetector collisionDetector;
+    private final CollisionDetector collisionDetector;
 
     @Autowired
     public Engine(BoardPresenter boardPresenter,

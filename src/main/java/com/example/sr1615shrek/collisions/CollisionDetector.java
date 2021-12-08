@@ -28,14 +28,13 @@ public class CollisionDetector {
                 // Solve if entity at the edge of board
             }
         } else {
-            detectTwoEntitiesCollisionProblem(entitiesOnOnePosition.get(0),
+            solveDetectedCollision(entitiesOnOnePosition.get(0),
                     entitiesOnOnePosition.get(1));
         }
     }
 
-    /* Checking the entities (with collision) hierarchy
-       and call the valid function in collisionSolver */
-    private void detectTwoEntitiesCollisionProblem(Entity firstEntity, Entity secondEntity){
+    // Calling the collision function in entity to solve the collision
+    private void solveDetectedCollision(Entity firstEntity, Entity secondEntity){
         firstEntity.collision(secondEntity);
         secondEntity.collision(firstEntity);
     }

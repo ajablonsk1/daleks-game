@@ -3,7 +3,7 @@ package com.example.sr1615shrek.test_models;
 import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.position.Vector2d;
-import com.example.sr1615shrek.entity.visitors.Visitor;
+import com.example.sr1615shrek.collisions.visitors.Visitor;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
 public class DynamicEntityModel extends DynamicEntity {

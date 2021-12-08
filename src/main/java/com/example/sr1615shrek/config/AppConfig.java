@@ -1,15 +1,14 @@
 package com.example.sr1615shrek.config;
 
+import com.example.sr1615shrek.entity.DynamicEntity;
+import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.game.Board;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.List;
 
 @Configuration
 public class AppConfig {
@@ -22,7 +21,9 @@ public class AppConfig {
 
     @Bean
     public Board board(){
-        return new Board(width, height);
+        BehaviorSubject<List<Entity>> collisionSubject = BehaviorSubject.create();
+        BehaviorSubject<DynamicEntity> entityMoveSubject = BehaviorSubject.create();
+        return new Board(width, height, collisionSubject, entityMoveSubject);
     }
 }
 

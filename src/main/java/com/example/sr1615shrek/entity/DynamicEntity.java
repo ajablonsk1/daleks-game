@@ -2,11 +2,7 @@ package com.example.sr1615shrek.entity;
 
 import com.example.sr1615shrek.entity.position.Direction;
 import com.example.sr1615shrek.entity.position.Vector2d;
-import com.example.sr1615shrek.entity.visitors.Visitor;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public abstract class DynamicEntity implements Entity {
 
@@ -16,7 +12,7 @@ public abstract class DynamicEntity implements Entity {
 
     private BehaviorSubject<DynamicEntity> positionSubject;
 
-    //DEFAULT GRAPHIC FOR DYNAMIC ENTITY FOR NOW
+    // Default visualisation for dynamic entity (it will be changed)
     private final String graphics = "D";
 
     public DynamicEntity(Vector2d position, BehaviorSubject<DynamicEntity> positionSubject) {
@@ -39,6 +35,10 @@ public abstract class DynamicEntity implements Entity {
         move(position.subtract(lastPosition).opposite());
     }
 
+    public Vector2d getLastPosition(){
+        return this.lastPosition;
+    }
+
     @Override
     public Vector2d getPosition() {
         return position;
@@ -47,10 +47,6 @@ public abstract class DynamicEntity implements Entity {
     @Override
     public void setPosition(Vector2d position) {
         this.position = position;
-    }
-
-    public Vector2d getLastPosition(){
-        return this.lastPosition;
     }
 
     @Override

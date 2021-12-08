@@ -3,7 +3,7 @@ package com.example.sr1615shrek.test_models;
 import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.StaticEntity;
 import com.example.sr1615shrek.entity.position.Vector2d;
-import com.example.sr1615shrek.entity.visitors.Visitor;
+import com.example.sr1615shrek.collisions.visitors.Visitor;
 
 public class DynamicVisitor implements Visitor {
 

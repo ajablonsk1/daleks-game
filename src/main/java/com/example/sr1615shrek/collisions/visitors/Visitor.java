@@ -1,4 +1,4 @@
-package com.example.sr1615shrek.entity.visitors;
+package com.example.sr1615shrek.collisions.visitors;
 
 import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.StaticEntity;

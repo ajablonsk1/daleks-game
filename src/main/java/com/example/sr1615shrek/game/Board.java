@@ -15,13 +15,18 @@ public class Board {
 
     private final int width;
 
-    private final BehaviorSubject<List<Entity>> collisionSubject = BehaviorSubject.create();
+    private final BehaviorSubject<List<Entity>> collisionSubject;
 
-    private final BehaviorSubject<DynamicEntity> entityMoveSubject = BehaviorSubject.create();
+    private final BehaviorSubject<DynamicEntity> entityMoveSubject;
 
-    public Board(int width, int height) {
+    public Board(int width,
+                 int height,
+                 BehaviorSubject<List<Entity>> collisionSubject,
+                 BehaviorSubject<DynamicEntity> entityMoveSubject) {
         this.height = height;
         this.width = width;
+        this.collisionSubject = collisionSubject;
+        this.entityMoveSubject = entityMoveSubject;
         this.entityMoveSubject.subscribe(this::onEntityPositionChange);
     }
 
