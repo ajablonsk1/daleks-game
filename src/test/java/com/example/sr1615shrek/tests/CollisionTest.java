@@ -3,6 +3,7 @@ package com.example.sr1615shrek.tests;
 import com.example.sr1615shrek.collisions.CollisionDetector;
 import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.Entity;
+import com.example.sr1615shrek.entity.model.Dalek;
 import com.example.sr1615shrek.entity.position.Direction;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import com.example.sr1615shrek.game.Board;
@@ -21,18 +22,24 @@ public class CollisionTest {
 
     private BehaviorSubject<List<Entity>> collisionSubject;
     private BehaviorSubject<DynamicEntity> entityMoveSubject;
+    private BehaviorSubject<Dalek> deadDalekSubject;
 
     @BeforeEach
     void setUp(){
         this.collisionSubject = BehaviorSubject.create();
         this.entityMoveSubject = BehaviorSubject.create();
+        this.deadDalekSubject = BehaviorSubject.create();
     }
 
     @Test
     public void collisionStaticWithDynamic(){
 
         // Given
-        Board board = new Board(10,10, collisionSubject, entityMoveSubject);
+        Board board = new Board(10,
+                10,
+                collisionSubject,
+                entityMoveSubject,
+                deadDalekSubject);
         Entity staticEntity = new StaticEntityModel(new Vector2d(2, 3));
         DynamicEntity dynamicEntity = new DynamicEntityModel(new Vector2d(2, 2),
                 board.getEntityMoveSubject());
@@ -52,7 +59,11 @@ public class CollisionTest {
     public void collisionDynamicWithDynamic(){
 
         // Given
-        Board board = new Board(10,10, collisionSubject, entityMoveSubject);
+        Board board = new Board(10,
+                10,
+                collisionSubject,
+                entityMoveSubject,
+                deadDalekSubject);
         DynamicEntity firstDynamicEntity = new DynamicEntityModel(new Vector2d(2,3),
                 board.getEntityMoveSubject());
         DynamicEntity secondDynamicEntity = new DynamicEntityModel(new Vector2d(2,2),

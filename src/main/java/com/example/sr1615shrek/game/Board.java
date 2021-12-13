@@ -1,7 +1,12 @@
 package com.example.sr1615shrek.game;
 
+import com.example.sr1615shrek.collisions.visitors.JunkVisitor;
+import com.example.sr1615shrek.collisions.visitors.VisitorService;
 import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.Entity;
+import com.example.sr1615shrek.entity.model.Dalek;
+import com.example.sr1615shrek.entity.model.Doctor;
+import com.example.sr1615shrek.entity.model.Junk;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
@@ -11,6 +16,8 @@ public class Board {
 
     private final Map<Vector2d, List<Entity>> entities = new HashMap<>();
 
+    private Doctor doctor;
+
     private final int height;
 
     private final int width;
@@ -19,15 +26,26 @@ public class Board {
 
     private final BehaviorSubject<DynamicEntity> entityMoveSubject;
 
+    private final BehaviorSubject<Dalek> deadDaleksSubject;
+
+    private final VisitorService visitorService;
+
     public Board(int width,
                  int height,
                  BehaviorSubject<List<Entity>> collisionSubject,
-                 BehaviorSubject<DynamicEntity> entityMoveSubject) {
+                 BehaviorSubject<DynamicEntity> entityMoveSubject,
+                 BehaviorSubject<Dalek> deadDaleksSubject,
+                 VisitorService visitorService) {
         this.height = height;
         this.width = width;
         this.collisionSubject = collisionSubject;
         this.entityMoveSubject = entityMoveSubject;
+        this.deadDaleksSubject = deadDaleksSubject;
+        this.visitorService = visitorService;
+
         this.entityMoveSubject.subscribe(this::onEntityPositionChange);
+        this.deadDaleksSubject.subscribe(this::onDalekDeath);
+
     }
 
     public List<Entity> getEntities(){
@@ -56,6 +74,15 @@ public class Board {
         addEntity(dynamicEntity);
     }
 
+    private void onDalekDeath(Dalek dalek){
+        Vector2d position = dalek.getPosition();
+        this.entities.get(position).remove(dalek);
+        if(this.entities.get(position).isEmpty()){
+            Junk junk = new Junk(position, this.visitorService.getJunkVisitor());
+            this.entities.get(position).add(junk);
+        }
+    }
+
     // Removing entity from map
     public void removeEntityFromBoard(Entity entity) {
         entities.get(entity.getPosition()).remove(entity);
@@ -71,6 +98,14 @@ public class Board {
 
     public BehaviorSubject<DynamicEntity> getEntityMoveSubject() {
         return entityMoveSubject;
+    }
+
+    public void setDoctor(Doctor doctor){
+        this.doctor = doctor;
+    }
+
+    public Doctor getDoctor(){
+        return this.doctor;
     }
 }
 

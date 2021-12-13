@@ -1,13 +1,14 @@
 package com.example.sr1615shrek.collisions.visitors;
 
-import com.example.sr1615shrek.entity.DynamicEntity;
-import com.example.sr1615shrek.entity.StaticEntity;
+import com.example.sr1615shrek.entity.model.Dalek;
+import com.example.sr1615shrek.entity.model.Doctor;
+import com.example.sr1615shrek.entity.model.Junk;
 
 public interface Visitor {
 
+    void collisionWithDoctor(Doctor doctor);
 
-    // Sample functions for testing(to change)
-    void collisionWithDynamicEntity(DynamicEntity dynamicEntity);
+    void collisionWithJunk(Junk junk);
 
-    void collisionWithStaticEntity(StaticEntity staticEntity);
+    void collisionWithDalek(Dalek dalek);
 }

@@ -2,6 +2,7 @@ package com.example.sr1615shrek.tests;
 
 import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.Entity;
+import com.example.sr1615shrek.entity.model.Dalek;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import com.example.sr1615shrek.game.Board;
 import com.example.sr1615shrek.test_models.DynamicEntityModel;
@@ -18,18 +19,24 @@ public class BoardTest {
 
     private BehaviorSubject<List<Entity>> collisionSubject;
     private BehaviorSubject<DynamicEntity> entityMoveSubject;
+    private BehaviorSubject<Dalek> deadDalekSubject;
 
     @BeforeEach
     void setUp(){
         this.collisionSubject = BehaviorSubject.create();
         this.entityMoveSubject = BehaviorSubject.create();
+        this.deadDalekSubject = BehaviorSubject.create();
     }
 
     @Test
     void addAndGetEntities(){
 
         // Given
-        Board board = new Board(10,10, collisionSubject, entityMoveSubject);
+        Board board = new Board(10,
+                10,
+                collisionSubject,
+                entityMoveSubject,
+                deadDalekSubject);
         Entity staticPassiveEntity = new StaticEntityModel(new Vector2d(2, 2));
         Entity dynamicEntity = new DynamicEntityModel(new Vector2d(2, 3), board.getEntityMoveSubject());
 
@@ -46,7 +53,11 @@ public class BoardTest {
     void removeEntityFromTheBoard(){
 
         // Given
-        Board board = new Board(10,10, collisionSubject, entityMoveSubject);
+        Board board = new Board(10,
+                10,
+                collisionSubject,
+                entityMoveSubject,
+                deadDalekSubject);
         Entity staticPassiveEntity = new StaticEntityModel(new Vector2d(2, 2));
         Entity dynamicEntity = new DynamicEntityModel(new Vector2d(2, 3), board.getEntityMoveSubject());
 
