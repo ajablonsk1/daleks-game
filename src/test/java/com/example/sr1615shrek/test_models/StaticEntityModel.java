@@ -13,11 +13,11 @@ public class StaticEntityModel extends StaticEntity {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.collisionWithStaticEntity(this);
+//        visitor.collisionWithStaticEntity(this);
     }
 
     @Override
     public void collision(Entity entity) {
-        entity.accept(new StaticVisitor());
+//        entity.accept(new StaticVisitor());
     }
 }

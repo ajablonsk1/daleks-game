@@ -11,6 +11,8 @@ public class Doctor extends DynamicEntity {
 
     private DoctorVisitor doctorVisitor;
 
+    private final String graphics = "Dr";
+
     public Doctor(Vector2d position,
                   BehaviorSubject<DynamicEntity> positionSubject,
                   DoctorVisitor doctorVisitor) {
@@ -30,5 +32,10 @@ public class Doctor extends DynamicEntity {
     @Override
     public void collision(Entity entity) {
         entity.accept(doctorVisitor);
+    }
+
+    @Override
+    public String getGraphics() {
+        return this.graphics;
     }
 }

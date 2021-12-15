@@ -56,6 +56,10 @@ public class Board {
                 .toList();
     }
 
+    public List<Entity> getEntitiesOnVector(Vector2d vector2d){
+        return this.entities.get(vector2d);
+    }
+
     // Adding entity to map
     public void addEntity(Entity entity) {
         this.entities.computeIfAbsent(entity.getPosition(), k -> new LinkedList<>());
@@ -106,6 +110,10 @@ public class Board {
 
     public Doctor getDoctor(){
         return this.doctor;
+    }
+
+    public BehaviorSubject<Dalek> getDeadDaleksSubject() {
+        return deadDaleksSubject;
     }
 }
 

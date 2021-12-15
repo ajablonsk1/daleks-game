@@ -42,4 +42,20 @@ public record Vector2d(int x, int y){
     public int getY() {
         return y;
     }
+
+    private double getLength() {
+        return Math.sqrt((x*x) + (y*y));
+    }
+
+    private int approximateCoordination(int coordination, double vectorLength) {
+        return Math.toIntExact(Math.round(Math.abs(coordination / vectorLength)) * (coordination < 0 ? -1 : 1));
+    }
+
+    public Vector2d getUnitVector() {
+        double vectorLength = getLength();
+        return new Vector2d(
+                approximateCoordination(x, vectorLength),
+                approximateCoordination(y, vectorLength)
+        );
+    }
 }

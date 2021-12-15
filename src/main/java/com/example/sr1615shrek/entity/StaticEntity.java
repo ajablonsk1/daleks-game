@@ -6,8 +6,6 @@ public abstract class StaticEntity implements Entity{
 
     private Vector2d position;
 
-    private final String graphics = "S";
-
     public StaticEntity(Vector2d position) {
         this.position = position;
     }
@@ -21,8 +19,4 @@ public abstract class StaticEntity implements Entity{
         this.position = position;
     }
 
-    @Override
-    public String getGraphics() {
-        return graphics;
-    }
 }

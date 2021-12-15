@@ -13,7 +13,7 @@ public class DoctorMoveController {
 
     private Scene scene;
 
-    private Engine engine;
+    private final Engine engine;
 
     @Autowired
     public DoctorMoveController(Engine engine){
@@ -27,14 +27,14 @@ public class DoctorMoveController {
     public void setOnKeyHandler(){
         this.scene.setOnKeyReleased(event -> {
             switch (event.getCode()){
-                case DIGIT8 -> engine.startTurn(Direction.NORTH);
-                case DIGIT9 -> engine.startTurn(Direction.NORTHEAST);
-                case DIGIT6 -> engine.startTurn(Direction.EAST);
-                case DIGIT3 -> engine.startTurn(Direction.SOUTHEAST);
-                case DIGIT2 -> engine.startTurn(Direction.SOUTH);
-                case DIGIT1 -> engine.startTurn(Direction.SOUTHWEST);
-                case DIGIT4 -> engine.startTurn(Direction.WEST);
-                case DIGIT7 -> engine.startTurn(Direction.NORTHWEST);
+                case NUMPAD8 -> engine.startTurn(Direction.SOUTH);
+                case NUMPAD9 -> engine.startTurn(Direction.SOUTHEAST);
+                case NUMPAD6 -> engine.startTurn(Direction.EAST);
+                case NUMPAD3 -> engine.startTurn(Direction.NORTHEAST);
+                case NUMPAD2 -> engine.startTurn(Direction.NORTH);
+                case NUMPAD1 -> engine.startTurn(Direction.NORTHWEST);
+                case NUMPAD4 -> engine.startTurn(Direction.WEST);
+                case NUMPAD7 -> engine.startTurn(Direction.SOUTHWEST);
             }
         });
     }

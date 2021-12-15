@@ -13,6 +13,8 @@ public class Dalek extends DynamicEntity {
 
     private final DalekVisitor dalekVisitor;
 
+    private final String graphics = "D";
+
     public Dalek(Vector2d position,
                  BehaviorSubject<DynamicEntity> positionSubject,
                  BehaviorSubject<Dalek> deadDaleksSubject,
@@ -20,6 +22,12 @@ public class Dalek extends DynamicEntity {
         super(position, positionSubject);
         this.deadDaleksSubject = deadDaleksSubject;
         this.dalekVisitor = dalekVisitor;
+    }
+
+    @Override
+    public void move(Vector2d vector2d) {
+        Vector2d goToVector =  vector2d.subtract(this.getPosition()).getUnitVector();
+        super.move(goToVector);
     }
 
     public void passingAway(){
@@ -34,5 +42,10 @@ public class Dalek extends DynamicEntity {
     @Override
     public void collision(Entity entity) {
         entity.accept(this.dalekVisitor);
+    }
+
+    @Override
+    public String getGraphics() {
+        return this.graphics;
     }
 }

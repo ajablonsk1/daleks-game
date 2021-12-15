@@ -14,11 +14,11 @@ public class DynamicEntityModel extends DynamicEntity {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.collisionWithDynamicEntity(this);
+//        visitor.collisionWithDynamicEntity(this);
     }
 
     @Override
     public void collision(Entity entity) {
-        entity.accept(new DynamicVisitor());
+//        entity.accept(new DynamicVisitor());
     }
 }

@@ -12,9 +12,6 @@ public abstract class DynamicEntity implements Entity {
 
     private BehaviorSubject<DynamicEntity> positionSubject;
 
-    // Default visualisation for dynamic entity (it will be changed)
-    private final String graphics = "D";
-
     public DynamicEntity(Vector2d position, BehaviorSubject<DynamicEntity> positionSubject) {
         this.position = position;
         this.lastPosition = position;
@@ -47,10 +44,5 @@ public abstract class DynamicEntity implements Entity {
     @Override
     public void setPosition(Vector2d position) {
         this.position = position;
-    }
-
-    @Override
-    public String getGraphics() {
-        return graphics;
     }
 }

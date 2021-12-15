@@ -50,17 +50,15 @@ public class BoardPresenter {
 
         // Filling the board with tiles
         for (int i = 0; i < board.getHeight(); i++) {
-            for (int j = 0; j < board.getWidth(); j++) {
+            for (int j = board.getWidth()-1; j >= 0; j--) {
                 Tile tile = new Tile(i, j);
 
-                tile.setTranslateX(j * 50);
-                tile.setTranslateY(i * 50);
+                tile.setTranslateX(i * 50);
+                tile.setTranslateY(j * 50);
                 grid.getChildren().add(tile);
                 tiles.put(new Vector2d(i, j), tile);
             }
         }
-
-        updateMap(entities);
     }
 
     private static class Tile extends StackPane{
@@ -86,6 +84,10 @@ public class BoardPresenter {
             text.setText(entity.getGraphics());
         }
 
+        private void putBlank() {
+            text.setText(" ");
+        }
+
         public int getX() {
             return x;
         }
@@ -98,8 +100,10 @@ public class BoardPresenter {
     // Function to update the visualisation of entities
     public void updateMap(List<Entity> entities){
         this.entities = entities;
+        this.tiles.values().forEach(Tile::putBlank);
         this.entities.forEach(entity -> {
             tiles.get(entity.getPosition()).draw(entity);
         });
+        this.entities.forEach(entity -> System.out.println(entity.getPosition()));
     }
 }

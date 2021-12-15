@@ -36,10 +36,8 @@ public class AppController {
         stage.setScene(scene);
         doctorMoveController.setScene(scene);
         doctorMoveController.setOnKeyHandler();
-        stage.show();
-
-        //Does nothing for now
         engine.start();
+        stage.show();
     }
 
     public void setStage(Stage stage){

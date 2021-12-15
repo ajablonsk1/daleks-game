@@ -1,5 +1,6 @@
 package com.example.sr1615shrek.collisions;
 
+import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import com.example.sr1615shrek.game.Board;
@@ -25,7 +26,7 @@ public class CollisionDetector {
             Entity entity = entitiesOnOnePosition.get(0);
 
             if(detectEntityOffTheMap(entity.getPosition())) {
-                // Solve if entity at the edge of board
+                // TODO
             }
         } else {
             solveDetectedCollision(entitiesOnOnePosition.get(0),

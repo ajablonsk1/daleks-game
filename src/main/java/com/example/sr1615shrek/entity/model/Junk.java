@@ -10,6 +10,8 @@ public class Junk extends StaticEntity {
 
     private final JunkVisitor junkVisitor;
 
+    private final String graphics = "J";
+
     public Junk(Vector2d position,
                 JunkVisitor junkVisitor) {
         super(position);
@@ -24,5 +26,10 @@ public class Junk extends StaticEntity {
     @Override
     public void collision(Entity entity) {
         entity.accept(junkVisitor);
+    }
+
+    @Override
+    public String getGraphics() {
+        return this.graphics;
     }
 }
