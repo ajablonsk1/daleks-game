@@ -1,6 +1,5 @@
 package com.example.sr1615shrek.game;
 
-import com.example.sr1615shrek.collisions.visitors.JunkVisitor;
 import com.example.sr1615shrek.collisions.visitors.VisitorService;
 import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.Entity;

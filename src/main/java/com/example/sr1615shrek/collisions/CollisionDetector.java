@@ -26,7 +26,7 @@ public class CollisionDetector {
             Entity entity = entitiesOnOnePosition.get(0);
 
             if(detectEntityOffTheMap(entity.getPosition())) {
-                // TODO
+                ((DynamicEntity) entity).moveBack();
             }
         } else {
             solveDetectedCollision(entitiesOnOnePosition.get(0),

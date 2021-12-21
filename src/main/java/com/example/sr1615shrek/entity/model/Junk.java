@@ -5,17 +5,23 @@ import com.example.sr1615shrek.collisions.visitors.Visitor;
 import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.StaticEntity;
 import com.example.sr1615shrek.entity.position.Vector2d;
+import javafx.scene.image.Image;
+
+import java.util.Objects;
 
 public class Junk extends StaticEntity {
 
     private final JunkVisitor junkVisitor;
 
-    private final String graphics = "J";
+    private Image graphics;
+
+    private static String path = "images/junk.png";
 
     public Junk(Vector2d position,
                 JunkVisitor junkVisitor) {
         super(position);
         this.junkVisitor = junkVisitor;
+        setGraphics(this.path);
     }
 
     @Override
@@ -29,7 +35,12 @@ public class Junk extends StaticEntity {
     }
 
     @Override
-    public String getGraphics() {
+    public Image getGraphics() {
         return this.graphics;
     }
+
+    private void setGraphics(String path){
+        this.graphics = new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
+    }
+
 }

@@ -4,12 +4,16 @@ import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import com.example.sr1615shrek.game.Board;
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,8 +21,6 @@ import org.springframework.stereotype.Controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static java.lang.String.valueOf;
 
 @Controller
 @FxmlView
@@ -37,7 +39,6 @@ public class BoardPresenter {
     private void initialize(){
         setBoardGridPane();
     }
-
 
     @Autowired
     public BoardPresenter(Board board){
@@ -61,8 +62,24 @@ public class BoardPresenter {
         }
     }
 
+
+    private void makePopUpWindow(String textString) {
+        grid.getChildren().clear();
+        Text text = new Text(textString);
+        text.setStyle("-fx-font: 150 arial;");
+        grid.getChildren().add(text);
+    }
+
+    public void showPopUpWindowForLose() {
+        makePopUpWindow("Game Over");
+    }
+
+    public void showPopUpWindowForWin() {
+        makePopUpWindow("Win");
+    }
+
     private static class Tile extends StackPane{
-        private final Text text = new Text();
+        private final ImageView imageView = new ImageView();
 
         private final int x;
 
@@ -74,18 +91,22 @@ public class BoardPresenter {
             rectangle.setStroke(Color.BLACK);
 
             setAlignment(Pos.CENTER);
-            getChildren().addAll(rectangle, text);
+
+            imageView.setFitWidth(50);
+            imageView.setFitHeight(50);
+
+            getChildren().addAll(rectangle, imageView);
             this.x = x;
             this.y = y;
         }
 
         // Drawing entities graphics (for now)
         private void draw(Entity entity) {
-            text.setText(entity.getGraphics());
+            imageView.setImage(entity.getGraphics());
         }
 
         private void putBlank() {
-            text.setText(" ");
+            imageView.setImage(null);
         }
 
         public int getX() {
@@ -104,6 +125,5 @@ public class BoardPresenter {
         this.entities.forEach(entity -> {
             tiles.get(entity.getPosition()).draw(entity);
         });
-        this.entities.forEach(entity -> System.out.println(entity.getPosition()));
     }
 }

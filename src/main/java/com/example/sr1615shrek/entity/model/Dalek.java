@@ -6,6 +6,9 @@ import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
+import javafx.scene.image.Image;
+
+import java.util.Objects;
 
 public class Dalek extends DynamicEntity {
 
@@ -13,7 +16,9 @@ public class Dalek extends DynamicEntity {
 
     private final DalekVisitor dalekVisitor;
 
-    private final String graphics = "D";
+    private Image graphics;
+
+    private static String path = "images/robot.png";
 
     public Dalek(Vector2d position,
                  BehaviorSubject<DynamicEntity> positionSubject,
@@ -22,6 +27,7 @@ public class Dalek extends DynamicEntity {
         super(position, positionSubject);
         this.deadDaleksSubject = deadDaleksSubject;
         this.dalekVisitor = dalekVisitor;
+        setGraphics(this.path);
     }
 
     @Override
@@ -30,8 +36,12 @@ public class Dalek extends DynamicEntity {
         super.move(goToVector);
     }
 
-    public void passingAway(){
+    public void passingAway() {
         deadDaleksSubject.onNext(this);
+    }
+
+    private void setGraphics(String path){
+        this.graphics = new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
     }
 
     @Override
@@ -45,7 +55,7 @@ public class Dalek extends DynamicEntity {
     }
 
     @Override
-    public String getGraphics() {
+    public Image getGraphics() {
         return this.graphics;
     }
 }

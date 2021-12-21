@@ -46,6 +46,25 @@ public class Engine {
     }
 
 
+    private boolean isGameWin() {
+        return this.board.getEntities()
+                .stream()
+                .filter(entity -> entity.getClass() == Dalek.class)
+                .findAny()
+                .isEmpty();
+    }
+
+    private boolean isGameLose() {
+        return !this.board.getDoctor().isAlive();
+    }
+
+    private void isGameEnd() {
+        if(this.isGameLose()) {
+            this.boardPresenter.showPopUpWindowForLose();
+        } else if(this.isGameWin()) {
+            this.boardPresenter.showPopUpWindowForWin();
+        }
+    }
 
     private boolean isVectorOccupied(Vector2d vector2d) {
         List<Entity> entityList = board.getEntitiesOnVector(vector2d);
@@ -99,5 +118,7 @@ public class Engine {
                 .filter(entity -> entity.getClass() == Dalek.class)
                 .forEach(entity -> ((Dalek) entity).move(this.board.getDoctor().getPosition()));
         this.boardPresenter.updateMap(this.board.getEntities());
+
+        this.isGameEnd();
     }
 }
