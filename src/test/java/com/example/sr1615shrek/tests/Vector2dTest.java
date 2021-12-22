@@ -3,7 +3,7 @@ package com.example.sr1615shrek.tests;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Vector2dTest {
 

@@ -2,9 +2,7 @@ package com.example.sr1615shrek.moveControllers;
 
 import com.example.sr1615shrek.entity.position.Direction;
 import com.example.sr1615shrek.game.Engine;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -27,14 +25,14 @@ public class DoctorMoveController {
     public void setOnKeyHandler(){
         this.scene.setOnKeyReleased(event -> {
             switch (event.getCode()){
-                case NUMPAD8 -> engine.startTurn(Direction.SOUTH);
-                case NUMPAD9 -> engine.startTurn(Direction.SOUTHEAST);
-                case NUMPAD6 -> engine.startTurn(Direction.EAST);
-                case NUMPAD3 -> engine.startTurn(Direction.NORTHEAST);
-                case NUMPAD2 -> engine.startTurn(Direction.NORTH);
-                case NUMPAD1 -> engine.startTurn(Direction.NORTHWEST);
-                case NUMPAD4 -> engine.startTurn(Direction.WEST);
-                case NUMPAD7 -> engine.startTurn(Direction.SOUTHWEST);
+                case NUMPAD8, W -> engine.startTurn(Direction.SOUTH);
+                case NUMPAD9, E -> engine.startTurn(Direction.SOUTHEAST);
+                case NUMPAD6, D -> engine.startTurn(Direction.EAST);
+                case NUMPAD3, C -> engine.startTurn(Direction.NORTHEAST);
+                case NUMPAD2, S -> engine.startTurn(Direction.NORTH);
+                case NUMPAD1, Z-> engine.startTurn(Direction.NORTHWEST);
+                case NUMPAD4, A -> engine.startTurn(Direction.WEST);
+                case NUMPAD7, Q -> engine.startTurn(Direction.SOUTHWEST);
             }
         });
     }

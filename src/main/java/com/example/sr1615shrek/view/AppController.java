@@ -1,7 +1,5 @@
 package com.example.sr1615shrek.view;
 
-import com.example.sr1615shrek.game.Engine;
-import com.example.sr1615shrek.moveControllers.DoctorMoveController;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -16,17 +14,9 @@ public class AppController {
 
     private final FxWeaver fxWeaver;
 
-    private Engine engine;
-
-    private DoctorMoveController doctorMoveController;
-
     @Autowired
-    public AppController(FxWeaver fxWeaver,
-                         Engine engine,
-                         DoctorMoveController doctorMoveController){
+    public AppController(FxWeaver fxWeaver){
         this.fxWeaver = fxWeaver;
-        this.engine = engine;
-        this.doctorMoveController = doctorMoveController;
     }
 
     // Initializing the board view, which is the actual game view
@@ -34,13 +24,23 @@ public class AppController {
         Parent root = fxWeaver.loadView(BoardPresenter.class);
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        doctorMoveController.setScene(scene);
-        doctorMoveController.setOnKeyHandler();
-        engine.start();
+        stage.show();
+    }
+
+    public void initGameOverView(String text){
+        Parent root = fxWeaver.loadView(GameOverController.class);
+        GameOverController gameOverController = fxWeaver.getBean(GameOverController.class);
+        gameOverController.setTextField(text);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
         stage.show();
     }
 
     public void setStage(Stage stage){
         this.stage = stage;
+    }
+
+    public Stage getStage(){
+        return this.stage;
     }
 }

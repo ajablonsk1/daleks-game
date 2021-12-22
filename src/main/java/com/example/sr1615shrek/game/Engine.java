@@ -10,6 +10,7 @@ import com.example.sr1615shrek.entity.model.Dalek;
 import com.example.sr1615shrek.entity.model.Doctor;
 import com.example.sr1615shrek.entity.position.Direction;
 import com.example.sr1615shrek.entity.position.Vector2d;
+import com.example.sr1615shrek.view.AppController;
 import com.example.sr1615shrek.view.BoardPresenter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,8 +61,10 @@ public class Engine {
 
     private void isGameEnd() {
         if(this.isGameLose()) {
+            this.board.getEntities().forEach(board::removeEntityFromBoard);
             this.boardPresenter.showPopUpWindowForLose();
         } else if(this.isGameWin()) {
+            this.board.getEntities().forEach(board::removeEntityFromBoard);
             this.boardPresenter.showPopUpWindowForWin();
         }
     }
@@ -111,7 +114,7 @@ public class Engine {
     }
 
 
-    public void startTurn(Direction direction){
+    public void startTurn(Direction direction) {
         this.board.getDoctor().move(direction);
         this.board.getEntities()
                 .stream()

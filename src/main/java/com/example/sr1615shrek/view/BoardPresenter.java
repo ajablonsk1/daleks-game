@@ -4,16 +4,12 @@ import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import com.example.sr1615shrek.game.Board;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,15 +31,18 @@ public class BoardPresenter {
 
     private List<Entity> entities;
 
+    private AppController appController;
+
     @FXML
     private void initialize(){
         setBoardGridPane();
     }
 
     @Autowired
-    public BoardPresenter(Board board){
+    public BoardPresenter(Board board, AppController appController){
         this.board = board;
         entities = board.getEntities();
+        this.appController = appController;
     }
 
     // Setting the board with given game conditions
@@ -62,22 +61,6 @@ public class BoardPresenter {
         }
     }
 
-
-    private void makePopUpWindow(String textString) {
-        grid.getChildren().clear();
-        Text text = new Text(textString);
-        text.setStyle("-fx-font: 150 arial;");
-        grid.getChildren().add(text);
-    }
-
-    public void showPopUpWindowForLose() {
-        makePopUpWindow("Game Over");
-    }
-
-    public void showPopUpWindowForWin() {
-        makePopUpWindow("Win");
-    }
-
     private static class Tile extends StackPane{
         private final ImageView imageView = new ImageView();
 
@@ -88,7 +71,7 @@ public class BoardPresenter {
         public Tile(int x, int y) {
             Rectangle rectangle = new Rectangle(50, 50);
             rectangle.setFill(null);
-            rectangle.setStroke(Color.BLACK);
+            rectangle.setStroke(Color.LIGHTGRAY);
 
             setAlignment(Pos.CENTER);
 
@@ -116,6 +99,16 @@ public class BoardPresenter {
         public int getY() {
             return y;
         }
+    }
+
+    public void showPopUpWindowForLose() {
+        String text = "Game over!";
+        this.appController.initGameOverView(text);
+    }
+
+    public void showPopUpWindowForWin() {
+        String text = "You win!";
+        this.appController.initGameOverView(text);
     }
 
     // Function to update the visualisation of entities

@@ -18,16 +18,16 @@ public class Dalek extends DynamicEntity {
 
     private Image graphics;
 
-    private static String path = "images/robot.png";
+    private static String graphicPath = "images/robot.png";
 
     public Dalek(Vector2d position,
-                 BehaviorSubject<DynamicEntity> positionSubject,
+                 BehaviorSubject<DynamicEntity> entityMoveSubject,
                  BehaviorSubject<Dalek> deadDaleksSubject,
                  DalekVisitor dalekVisitor) {
-        super(position, positionSubject);
+        super(position, entityMoveSubject);
         this.deadDaleksSubject = deadDaleksSubject;
         this.dalekVisitor = dalekVisitor;
-        setGraphics(this.path);
+        setGraphics(graphicPath);
     }
 
     @Override

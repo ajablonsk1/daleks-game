@@ -15,13 +15,13 @@ public class Junk extends StaticEntity {
 
     private Image graphics;
 
-    private static String path = "images/junk.png";
+    private static String graphicPath = "images/junk.png";
 
     public Junk(Vector2d position,
                 JunkVisitor junkVisitor) {
         super(position);
         this.junkVisitor = junkVisitor;
-        setGraphics(this.path);
+        setGraphics(graphicPath);
     }
 
     @Override
