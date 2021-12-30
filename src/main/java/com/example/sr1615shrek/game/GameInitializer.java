@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StartGame {
+public class GameInitializer {
 
     private final AppController appController;
 
@@ -16,7 +16,7 @@ public class StartGame {
     private final DoctorMoveController doctorMoveController;
 
     @Autowired
-    public StartGame(AppController appController, Engine engine, DoctorMoveController doctorMoveController) {
+    public GameInitializer(AppController appController, Engine engine, DoctorMoveController doctorMoveController) {
         this.appController = appController;
         this.engine = engine;
         this.doctorMoveController = doctorMoveController;
@@ -26,7 +26,6 @@ public class StartGame {
         this.appController.setStage(stage);
         this.appController.initBoardView();
         this.doctorMoveController.setScene(this.appController.getStage().getScene());
-        this.doctorMoveController.setOnKeyHandler();
         this.engine.start();
     }
 }

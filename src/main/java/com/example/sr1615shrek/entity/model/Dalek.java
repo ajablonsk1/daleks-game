@@ -16,10 +16,6 @@ public class Dalek extends DynamicEntity {
 
     private final DalekVisitor dalekVisitor;
 
-    private Image graphics;
-
-    private static String graphicPath = "images/robot.png";
-
     public Dalek(Vector2d position,
                  BehaviorSubject<DynamicEntity> entityMoveSubject,
                  BehaviorSubject<Dalek> deadDaleksSubject,
@@ -27,7 +23,6 @@ public class Dalek extends DynamicEntity {
         super(position, entityMoveSubject);
         this.deadDaleksSubject = deadDaleksSubject;
         this.dalekVisitor = dalekVisitor;
-        setGraphics(graphicPath);
     }
 
     @Override
@@ -40,10 +35,6 @@ public class Dalek extends DynamicEntity {
         deadDaleksSubject.onNext(this);
     }
 
-    private void setGraphics(String path){
-        this.graphics = new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
-    }
-
     @Override
     public void accept(Visitor visitor) {
         visitor.collisionWithDalek(this);
@@ -52,10 +43,5 @@ public class Dalek extends DynamicEntity {
     @Override
     public void collision(Entity entity) {
         entity.accept(this.dalekVisitor);
-    }
-
-    @Override
-    public Image getGraphics() {
-        return this.graphics;
     }
 }

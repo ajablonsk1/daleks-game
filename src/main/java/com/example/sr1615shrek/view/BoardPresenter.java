@@ -5,6 +5,7 @@ import com.example.sr1615shrek.entity.position.Vector2d;
 import com.example.sr1615shrek.game.Board;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @FxmlView
@@ -33,16 +35,25 @@ public class BoardPresenter {
 
     private AppController appController;
 
+    private final ImageService imageService;
+
+    private static final String GAME_OVER_TEXT = "Game over!";
+
+    private static final String GAME_WIN_TEXT  = "You win!";
+
+    private static final int TILE_SIZE = 50;
+
     @FXML
     private void initialize(){
         setBoardGridPane();
     }
 
     @Autowired
-    public BoardPresenter(Board board, AppController appController){
+    public BoardPresenter(Board board, AppController appController, ImageService imageService){
         this.board = board;
         entities = board.getEntities();
         this.appController = appController;
+        this.imageService = imageService;
     }
 
     // Setting the board with given game conditions
@@ -53,15 +64,15 @@ public class BoardPresenter {
             for (int j = board.getWidth()-1; j >= 0; j--) {
                 Tile tile = new Tile(i, j);
 
-                tile.setTranslateX(i * 50);
-                tile.setTranslateY(j * 50);
+                tile.setTranslateX(i * TILE_SIZE);
+                tile.setTranslateY(j * TILE_SIZE);
                 grid.getChildren().add(tile);
                 tiles.put(new Vector2d(i, j), tile);
             }
         }
     }
 
-    private static class Tile extends StackPane{
+    private class Tile extends StackPane{
         private final ImageView imageView = new ImageView();
 
         private final int x;
@@ -69,14 +80,14 @@ public class BoardPresenter {
         private final int y;
 
         public Tile(int x, int y) {
-            Rectangle rectangle = new Rectangle(50, 50);
+            Rectangle rectangle = new Rectangle(TILE_SIZE, TILE_SIZE);
             rectangle.setFill(null);
             rectangle.setStroke(Color.LIGHTGRAY);
 
             setAlignment(Pos.CENTER);
 
-            imageView.setFitWidth(50);
-            imageView.setFitHeight(50);
+            imageView.setFitWidth(TILE_SIZE);
+            imageView.setFitHeight(TILE_SIZE);
 
             getChildren().addAll(rectangle, imageView);
             this.x = x;
@@ -85,7 +96,7 @@ public class BoardPresenter {
 
         // Drawing entities graphics (for now)
         private void draw(Entity entity) {
-            imageView.setImage(entity.getGraphics());
+            imageView.setImage(imageService.getEntityImage(entity));
         }
 
         private void putBlank() {
@@ -102,13 +113,11 @@ public class BoardPresenter {
     }
 
     public void showPopUpWindowForLose() {
-        String text = "Game over!";
-        this.appController.initGameOverView(text);
+        this.appController.initGameOverView(GAME_OVER_TEXT);
     }
 
     public void showPopUpWindowForWin() {
-        String text = "You win!";
-        this.appController.initGameOverView(text);
+        this.appController.initGameOverView(GAME_WIN_TEXT);
     }
 
     // Function to update the visualisation of entities

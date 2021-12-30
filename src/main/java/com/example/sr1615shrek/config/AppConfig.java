@@ -25,7 +25,7 @@ public class AppConfig {
     public Board board(VisitorService visitorService){
         BehaviorSubject<List<Entity>> collisionSubject = BehaviorSubject.create();
         BehaviorSubject<DynamicEntity> entityMoveSubject = BehaviorSubject.create();
-        BehaviorSubject<Dalek> deadDaleksSubject = BehaviorSubject.create();;
+        BehaviorSubject<Dalek> deadDaleksSubject = BehaviorSubject.create();
         return new Board(width,
                 height,
                 collisionSubject,

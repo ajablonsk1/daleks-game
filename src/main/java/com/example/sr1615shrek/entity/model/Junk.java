@@ -13,15 +13,10 @@ public class Junk extends StaticEntity {
 
     private final JunkVisitor junkVisitor;
 
-    private Image graphics;
-
-    private static String graphicPath = "images/junk.png";
-
     public Junk(Vector2d position,
                 JunkVisitor junkVisitor) {
         super(position);
         this.junkVisitor = junkVisitor;
-        setGraphics(graphicPath);
     }
 
     @Override
@@ -33,14 +28,4 @@ public class Junk extends StaticEntity {
     public void collision(Entity entity) {
         entity.accept(junkVisitor);
     }
-
-    @Override
-    public Image getGraphics() {
-        return this.graphics;
-    }
-
-    private void setGraphics(String path){
-        this.graphics = new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
-    }
-
 }

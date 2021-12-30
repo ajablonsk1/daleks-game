@@ -2,9 +2,11 @@ package com.example.sr1615shrek.tests;
 
 import com.example.sr1615shrek.entity.position.Vector2d;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest
 class Vector2dTest {
 
     @Test

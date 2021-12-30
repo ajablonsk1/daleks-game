@@ -13,39 +13,37 @@ import com.example.sr1615shrek.game.Board;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
+@SpringBootTest
 public class BoardTest {
 
-    private BehaviorSubject<List<Entity>> collisionSubject;
     private BehaviorSubject<DynamicEntity> entityMoveSubject;
     private BehaviorSubject<Dalek> deadDalekSubject;
     private VisitorService visitorService;
 
+    @Autowired
+    private Board board;
+
     @BeforeEach
     void setUp() {
-        this.collisionSubject = BehaviorSubject.create();
-        this.entityMoveSubject = BehaviorSubject.create();
-        this.deadDalekSubject = BehaviorSubject.create();
         this.visitorService = new VisitorService(new DalekVisitor(),
                 new DoctorVisitor(),
                 new JunkVisitor());
+        this.entityMoveSubject = board.getEntityMoveSubject();
+        this.deadDalekSubject = board.getDeadDaleksSubject();
+        this.board.getEntities().forEach(board::removeEntityFromBoard);
     }
 
     @Test
     public void addAndGetEntities(){
 
         // Given
-        Board board = new Board(10,
-                10,
-                collisionSubject,
-                entityMoveSubject,
-                deadDalekSubject,
-                visitorService);
         Entity dalek = new Dalek(new Vector2d(2, 2), entityMoveSubject, deadDalekSubject,visitorService.getDalekVisitor());
         Entity junk = new Junk(new Vector2d(2, 3), visitorService.getJunkVisitor());
 
@@ -62,12 +60,6 @@ public class BoardTest {
     void removeEntityFromTheBoard(){
 
         // Given
-        Board board = new Board(10,
-                10,
-                collisionSubject,
-                entityMoveSubject,
-                deadDalekSubject,
-                visitorService);
         Entity dalek = new Dalek(new Vector2d(2, 2), entityMoveSubject, deadDalekSubject,visitorService.getDalekVisitor());
         Entity junk = new Junk(new Vector2d(2, 3), visitorService.getJunkVisitor());
 

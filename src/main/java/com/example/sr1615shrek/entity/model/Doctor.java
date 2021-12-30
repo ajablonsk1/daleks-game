@@ -14,10 +14,6 @@ public class Doctor extends DynamicEntity {
 
     private DoctorVisitor doctorVisitor;
 
-    private Image graphics;
-
-    private static String graphicPath = "images/shrek.png";
-
     private boolean isAlive;
 
     public Doctor(Vector2d position,
@@ -26,8 +22,6 @@ public class Doctor extends DynamicEntity {
         super(position, entityMoveSubject);
         this.doctorVisitor = doctorVisitor;
         isAlive = true;
-
-        setGraphics(graphicPath);
     }
 
     public void passingAway(){
@@ -43,15 +37,6 @@ public class Doctor extends DynamicEntity {
     @Override
     public void collision(Entity entity) {
         entity.accept(doctorVisitor);
-    }
-
-    @Override
-    public Image getGraphics() {
-        return this.graphics;
-    }
-
-    private void setGraphics(String path){
-        this.graphics = new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
     }
 
     public boolean isAlive() {

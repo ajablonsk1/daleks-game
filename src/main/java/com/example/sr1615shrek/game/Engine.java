@@ -8,6 +8,7 @@ import com.example.sr1615shrek.collisions.visitors.VisitorService;
 import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.model.Dalek;
 import com.example.sr1615shrek.entity.model.Doctor;
+import com.example.sr1615shrek.entity.model.Junk;
 import com.example.sr1615shrek.entity.position.Direction;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import com.example.sr1615shrek.view.AppController;
@@ -44,6 +45,7 @@ public class Engine {
         this.boardPresenter = boardPresenter;
         this.collisionDetector = collisionDetector;
         this.visitorService = visitorService;
+        this.board.getDeadDaleksSubject().subscribe(this::onDalekDeath);
     }
 
 
@@ -118,10 +120,19 @@ public class Engine {
         this.board.getDoctor().move(direction);
         this.board.getEntities()
                 .stream()
-                .filter(entity -> entity.getClass() == Dalek.class)
+                .filter(Dalek.class::isInstance)
                 .forEach(entity -> ((Dalek) entity).move(this.board.getDoctor().getPosition()));
         this.boardPresenter.updateMap(this.board.getEntities());
 
         this.isGameEnd();
+    }
+
+    private void onDalekDeath(Dalek dalek){
+        Vector2d position = dalek.getPosition();
+        this.board.removeEntityFromBoard(dalek);
+        if(this.board.getEntitiesOnVector(position).isEmpty()){
+            Junk junk = new Junk(position, this.visitorService.getJunkVisitor());
+            this.board.getEntitiesOnVector(position).add(junk);
+        }
     }
 }

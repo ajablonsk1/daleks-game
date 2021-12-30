@@ -43,7 +43,6 @@ public class Board {
         this.visitorService = visitorService;
 
         this.entityMoveSubject.subscribe(this::onEntityPositionChange);
-        this.deadDaleksSubject.subscribe(this::onDalekDeath);
 
     }
 
@@ -75,15 +74,6 @@ public class Board {
     private void onEntityPositionChange(DynamicEntity dynamicEntity){
         this.entities.get(dynamicEntity.getLastPosition()).remove(dynamicEntity);
         addEntity(dynamicEntity);
-    }
-
-    private void onDalekDeath(Dalek dalek){
-        Vector2d position = dalek.getPosition();
-        this.entities.get(position).remove(dalek);
-        if(this.entities.get(position).isEmpty()){
-            Junk junk = new Junk(position, this.visitorService.getJunkVisitor());
-            this.entities.get(position).add(junk);
-        }
     }
 
     // Removing entity from map

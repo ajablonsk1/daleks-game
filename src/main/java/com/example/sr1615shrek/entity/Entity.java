@@ -10,8 +10,6 @@ public interface Entity {
 
     void collision(Entity entity);
 
-    Image getGraphics();
-
     Vector2d getPosition();
 
     void setPosition(Vector2d position);

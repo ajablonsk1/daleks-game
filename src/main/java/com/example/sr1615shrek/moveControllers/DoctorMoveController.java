@@ -20,9 +20,10 @@ public class DoctorMoveController {
 
     public void setScene(Scene scene){
         this.scene = scene;
+        this.initOnKeyHandler();
     }
 
-    public void setOnKeyHandler(){
+    private void initOnKeyHandler(){
         this.scene.setOnKeyReleased(event -> {
             switch (event.getCode()){
                 case NUMPAD8, W -> engine.startTurn(Direction.SOUTH);

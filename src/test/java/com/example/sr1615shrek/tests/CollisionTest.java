@@ -5,6 +5,7 @@ import com.example.sr1615shrek.collisions.visitors.DalekVisitor;
 import com.example.sr1615shrek.collisions.visitors.DoctorVisitor;
 import com.example.sr1615shrek.collisions.visitors.JunkVisitor;
 import com.example.sr1615shrek.collisions.visitors.VisitorService;
+import com.example.sr1615shrek.config.AppConfig;
 import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.StaticEntity;
@@ -14,41 +15,48 @@ import com.example.sr1615shrek.entity.model.Junk;
 import com.example.sr1615shrek.entity.position.Direction;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import com.example.sr1615shrek.game.Board;
+import com.example.sr1615shrek.game.Engine;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.stereotype.Component;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
 public class CollisionTest {
 
-    private BehaviorSubject<List<Entity>> collisionSubject;
+//    private BehaviorSubject<List<Entity>> collisionSubject;
     private BehaviorSubject<DynamicEntity> entityMoveSubject;
     private BehaviorSubject<Dalek> deadDalekSubject;
     private VisitorService visitorService;
 
+    @Autowired
+    private Board board;
+
     @BeforeEach
     void setUp() {
-        this.collisionSubject = BehaviorSubject.create();
-        this.entityMoveSubject = BehaviorSubject.create();
-        this.deadDalekSubject = BehaviorSubject.create();
         this.visitorService = new VisitorService(new DalekVisitor(),
                 new DoctorVisitor(),
                 new JunkVisitor());
+        this.board.getEntities().forEach(entity -> System.out.println(entity.getPosition()));
+//        this.collisionSubject = board.getCollisionSubject();
+        this.entityMoveSubject = board.getEntityMoveSubject();
+        this.deadDalekSubject = board.getDeadDaleksSubject();
+        this.board.getEntities().forEach(board::removeEntityFromBoard);
     }
 
     @Test
     public void collisionDalekWithDalek(){
 
         // Given
-        Board board = new Board(10,
-                10,
-                collisionSubject,
-                entityMoveSubject,
-                deadDalekSubject,
-                visitorService);
         DynamicEntity dalek1 = new Dalek(new Vector2d(2, 2),
                 entityMoveSubject,
                 deadDalekSubject,
@@ -77,12 +85,6 @@ public class CollisionTest {
     public void collisionDoctorWithDalek(){
 
         // Given
-        Board board = new Board(10,
-                10,
-                collisionSubject,
-                entityMoveSubject,
-                deadDalekSubject,
-                visitorService);
         DynamicEntity dalek = new Dalek(new Vector2d(2, 2),
                 entityMoveSubject,
                 deadDalekSubject,
@@ -105,12 +107,6 @@ public class CollisionTest {
     public void collisionJunkWithDalek(){
 
         // Given
-        Board board = new Board(10,
-                10,
-                collisionSubject,
-                entityMoveSubject,
-                deadDalekSubject,
-                visitorService);
         DynamicEntity dalek = new Dalek(new Vector2d(2, 2),
                 entityMoveSubject,
                 deadDalekSubject,
@@ -138,12 +134,6 @@ public class CollisionTest {
     public void collisionJunkWithDoctor(){
 
         // Given
-        Board board = new Board(10,
-                10,
-                collisionSubject,
-                entityMoveSubject,
-                deadDalekSubject,
-                visitorService);
         StaticEntity junk = new Junk(new Vector2d(2, 3),
                 visitorService.getJunkVisitor());
         Doctor doctor = new Doctor(new Vector2d(2, 2),
@@ -164,13 +154,7 @@ public class CollisionTest {
     public void endOfTheBoardCollision(){
 
         // Given
-        Board board = new Board(10,
-                10,
-                collisionSubject,
-                entityMoveSubject,
-                deadDalekSubject,
-                visitorService);
-        Doctor doctor = new Doctor(new Vector2d(9, 9),
+        Doctor doctor = new Doctor(new Vector2d(19, 19),
                 entityMoveSubject,
                 visitorService.getDoctorVisitor());
         CollisionDetector collisionDetector = new CollisionDetector(board);
@@ -180,6 +164,6 @@ public class CollisionTest {
         doctor.move(Direction.NORTH);
 
         // Then
-        assertEquals(new Vector2d(9, 9), doctor.getPosition());
+        assertEquals(new Vector2d(19, 19), doctor.getPosition());
     }
 }

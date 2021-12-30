@@ -30,7 +30,7 @@ public class AppController {
     public void initGameOverView(String text){
         Parent root = fxWeaver.loadView(GameOverController.class);
         GameOverController gameOverController = fxWeaver.getBean(GameOverController.class);
-        gameOverController.setTextField(text);
+        gameOverController.setInfoText(text);
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
