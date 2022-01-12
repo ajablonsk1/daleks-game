@@ -1,7 +1,6 @@
 package com.example.sr1615shrek.view;
 
 import com.example.sr1615shrek.game.GameInitializer;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
@@ -24,21 +23,20 @@ public class GameOverController {
 
     private final AppController appController;
 
-    private GameInitializer startGame;
+    private final GameInitializer startGame;
 
     @FXML
     private void initialize(){
     }
 
     @Autowired
-    public GameOverController(AppController appController,
-                              GameInitializer startGame){
-        this.appController = appController;
+    public GameOverController(GameInitializer startGame){
         this.startGame = startGame;
+        this.appController = this.startGame.getAppController();
     }
 
-    public void playAgain(){
-        this.startGame.startGame(this.appController.getStage());
+    public void playAgain(){        // TODO: think how to start new game looking at GameType
+        this.startGame.startGameRandom(this.appController.getStage());
     }
 
     public void setInfoText(String text){

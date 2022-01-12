@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 @FxmlView
 @Component
@@ -34,14 +33,24 @@ public class CampaignModePresenter {
     public AnchorPane anchorPane;
 
     private final AppController appController;
+
     private final GameInitializer startGame;
 
     private final static int IMAGE_SIZE = 80;
 
     private int lvlNumber = 0;
+
     private final Map<Integer, Vector2d> circleLvlPosition = new HashMap<>();
 
     private List<Node> circles;
+
+    private static String playerImagePath = "images/shrek_face.png";
+
+    private static String congratulationForEndOfCampaignString = "Congratulations, you have completed the campaign mode!";
+
+    private static int gameCompleteTextPositionX = 180;
+
+    private static int gameCompleteTextPositionY = 800;
 
     @FXML
     private void initialize(){
@@ -56,10 +65,10 @@ public class CampaignModePresenter {
         imageView.setFitWidth(IMAGE_SIZE);
         imageView.setFitHeight(IMAGE_SIZE);
 
-        Image image = new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("images/shrek_face.png")));
+        Image image = new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(playerImagePath)));
         imageView.setImage(image);
 
-        showPlayer();
+        movePlayerIcon();
     }
 
     @Autowired
@@ -81,48 +90,37 @@ public class CampaignModePresenter {
             circleLvlPosition.put(i, calculateCircleCenter((Circle) circles.get(i)));
     }
 
-
     public void play() {
-        this.startGame.startGame(this.appController.getStage());
+        this.startGame.startGameCampaign(this.appController.getStage(), getLevelPath());
     }
 
     public void goHome() {
         this.appController.initWelcomeView();
     }
 
-
-    private void showPlayer(){
+    private void movePlayerIcon(){
         Vector2d playerPosition = circleLvlPosition.get(lvlNumber);
         imageView.setX(playerPosition.getX());
         imageView.setY(playerPosition.getY());
-
     }
 
     private void gameComplete(){
         if(lvlNumber >= 9){
             playBtn.setDisable(true);
 
-            Text endGameText = new Text("Congratulations, you have completed the campaign mode!");
+            Text endGameText = new Text(congratulationForEndOfCampaignString);
             endGameText.setStyle("-fx-font: 24 arial;");
-            endGameText.setX(180);
-            endGameText.setY(800);
+            endGameText.setX(gameCompleteTextPositionX);
+            endGameText.setY(gameCompleteTextPositionY);
             anchorPane.getChildren().add(endGameText);
         }
     }
 
-    public void nextLevel(){
-        try{
-            TimeUnit.MILLISECONDS.sleep(100);
-        }catch (Exception e){
-            System.out.println(e);
-        }
+    private String getLevelPath() {
+        return lvlNumber + ".txt";
+    }
 
-        if(this.lvlNumber < 9){
-            this.lvlNumber++;
-        }
-        else{
-           gameComplete();
-        }
-        showPlayer();
+    public void nextLevel(){
+        this.lvlNumber = Math.max(this.lvlNumber+1, 9);
     }
 }

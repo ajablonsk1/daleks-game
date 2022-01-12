@@ -15,8 +15,6 @@ public class GameInitializer {
 
     private final DoctorMoveController doctorMoveController;
 
-    private boolean campaignMode = false;
-
     @Autowired
     public GameInitializer(AppController appController, Engine engine, DoctorMoveController doctorMoveController) {
         this.appController = appController;
@@ -24,18 +22,24 @@ public class GameInitializer {
         this.doctorMoveController = doctorMoveController;
     }
 
-    public void startGame(Stage stage){
+    private void initBeforeStartGame(Stage stage, GameType gameType) {
         this.appController.setStage(stage);
+        this.appController.setCurrentGameType(gameType);
         this.appController.initBoardView();
         this.doctorMoveController.setScene(this.appController.getStage().getScene());
-        this.engine.start(campaignMode);
     }
 
-    public void turnOnCampaignMode() {
-        this.campaignMode = true;
+    public void startGameRandom(Stage stage){
+        this.initBeforeStartGame(stage, GameType.RANDOM);
+        this.engine.startRandom();
     }
 
-    public void turnOffCampaignMode() {
-        this.campaignMode = false;
+    public void startGameCampaign(Stage stage, String pathToLevelSettings) {
+        this.initBeforeStartGame(stage, GameType.CAMPAIGN);
+        this.engine.startCampaign(pathToLevelSettings);
+    }
+
+    public AppController getAppController() {
+        return appController;
     }
 }

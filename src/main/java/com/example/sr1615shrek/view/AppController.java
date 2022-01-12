@@ -1,5 +1,6 @@
 package com.example.sr1615shrek.view;
 
+import com.example.sr1615shrek.game.GameType;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -14,6 +15,12 @@ public class AppController {
 
     private final FxWeaver fxWeaver;
 
+    private static final String GAME_OVER_TEXT = "Game over!";
+
+    private static final String GAME_WIN_TEXT  = "You win!";
+
+    private GameType currentGameType = GameType.RANDOM;
+
     @Autowired
     public AppController(FxWeaver fxWeaver){
         this.fxWeaver = fxWeaver;
@@ -27,7 +34,18 @@ public class AppController {
         stage.show();
     }
 
-    public void initGameOverView(String text){
+    public void initGameOverViewIfWin() {
+        switch (currentGameType) {
+            case RANDOM -> initGameOverView(GAME_OVER_TEXT);
+            case CAMPAIGN -> initNextLevelView();
+        }
+    }
+
+    public void initGameOverViewIfLose() {
+        initGameOverView(GAME_OVER_TEXT);
+    }
+
+    private void initGameOverView(String text){
         Parent root = fxWeaver.loadView(GameOverController.class);
         GameOverController gameOverController = fxWeaver.getBean(GameOverController.class);
         gameOverController.setInfoText(text);
@@ -57,6 +75,9 @@ public class AppController {
         stage.show();
     }
 
+    public void nextLevel(){
+        getCampaignModePresenter().nextLevel();
+    }
 
     public void setStage(Stage stage){
         this.stage = stage;
@@ -68,5 +89,13 @@ public class AppController {
 
     public CampaignModePresenter getCampaignModePresenter(){
         return fxWeaver.getBean(CampaignModePresenter.class);
+    }
+
+    public void setCurrentGameType(GameType currentGameType) {
+        this.currentGameType = currentGameType;
+    }
+
+    public GameType getCurrentGameType() {
+        return currentGameType;
     }
 }

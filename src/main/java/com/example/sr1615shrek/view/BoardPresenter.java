@@ -37,10 +37,6 @@ public class BoardPresenter {
 
     private final ImageService imageService;
 
-    private static final String GAME_OVER_TEXT = "Game over!";
-
-    private static final String GAME_WIN_TEXT  = "You win!";
-
     private static final int TILE_SIZE = 50;
 
     @FXML
@@ -113,11 +109,11 @@ public class BoardPresenter {
     }
 
     public void showPopUpWindowForLose() {
-        this.appController.initGameOverView(GAME_OVER_TEXT);
+        this.appController.initGameOverViewIfLose();
     }
 
     public void showPopUpWindowForWin() {
-        this.appController.initGameOverView(GAME_WIN_TEXT);
+        this.appController.initGameOverViewIfWin();
     }
 
     public void showPopUpWindowForWinInCampaignMode(){

@@ -1,8 +1,6 @@
 package com.example.sr1615shrek.view;
 
-import com.example.sr1615shrek.GameApplication;
 import com.example.sr1615shrek.game.GameInitializer;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
@@ -14,8 +12,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class WelcomePresenter {
 
-    private final AppController appController;
     private final GameInitializer startGame;
+    private final AppController appController;
+
     @FXML
     public Text text;
 
@@ -30,20 +29,16 @@ public class WelcomePresenter {
     }
 
     @Autowired
-    public WelcomePresenter(AppController appController,
-                              GameInitializer startGame){
-        this.appController = appController;
+    public WelcomePresenter(GameInitializer startGame){
         this.startGame = startGame;
+        this.appController = startGame.getAppController();
     }
 
-
     public void playRandom() {
-        this.startGame.turnOffCampaignMode();
-        this.startGame.startGame(this.appController.getStage());
+        this.startGame.startGameRandom(this.appController.getStage());
     }
 
     public void playCampaignMode() {
-        this.startGame.turnOnCampaignMode();
         this.appController.initCampaignModeView();
     }
 }
