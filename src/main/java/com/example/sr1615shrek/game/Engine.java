@@ -31,6 +31,10 @@ public class Engine {
 
     private VisitorService visitorService;
 
+    private boolean campaignMode;
+    private int lvlNumber = 0;
+    private LevelsMapsReader reader;
+
     @Value("${engine.startingDaleksAmount}")
     private int startingDaleksAmount;
 
@@ -46,6 +50,10 @@ public class Engine {
         this.collisionDetector = collisionDetector;
         this.visitorService = visitorService;
         this.board.getDeadDaleksSubject().subscribe(this::onDalekDeath);
+    }
+
+    private void openReader(){
+        reader = new LevelsMapsReader(lvlNumber + ".txt");
     }
 
 
@@ -67,7 +75,13 @@ public class Engine {
             this.boardPresenter.showPopUpWindowForLose();
         } else if(this.isGameWin()) {
             this.board.getEntities().forEach(board::removeEntityFromBoard);
-            this.boardPresenter.showPopUpWindowForWin();
+
+            if(campaignMode){
+                this.boardPresenter.showPopUpWindowForWinInCampaignMode();
+                lvlNumber++;
+            }
+            else
+                this.boardPresenter.showPopUpWindowForWin();
         }
     }
 
@@ -91,25 +105,58 @@ public class Engine {
         board.addEntity(entity);
     }
 
+    private void loadDoctorPosition(Doctor doctor){
+        doctor.setPosition(reader.getDoctorPosition());
+        board.addEntity(doctor);
+    }
+
+    private void loadDalekPosition(Dalek dalek, int dalekId){
+        dalek.setPosition(reader.getDaleksPositions().get(dalekId));
+        board.addEntity(dalek);
+    }
+
     private void addDoctorToBoard(){
         Doctor doctor = new Doctor(getRandomVector(),
                 this.board.getEntityMoveSubject(),
                 this.visitorService.getDoctorVisitor());
 
-        addEntityToBoardOnRandomPosition(doctor);
+        if(!campaignMode){
+            addEntityToBoardOnRandomPosition(doctor);
+        }
+        else{
+            loadDoctorPosition(doctor);
+        }
+
         this.board.setDoctor(doctor);
     }
 
     private void addDaleksToBoard(){
-        for(int i = 0; i < startingDaleksAmount; i++) {
-            addEntityToBoardOnRandomPosition(new Dalek(getRandomVector(),
-                    this.board.getEntityMoveSubject(),
-                    this.board.getDeadDaleksSubject(),
-                    this.visitorService.getDalekVisitor()));
+        if(campaignMode){
+            startingDaleksAmount = reader.getNoDaleks();
+
+            for(int i = 0; i < startingDaleksAmount; i++){
+                Dalek dalek = new Dalek(getRandomVector(),
+                        this.board.getEntityMoveSubject(),
+                        this.board.getDeadDaleksSubject(),
+                        this.visitorService.getDalekVisitor());
+                loadDalekPosition(dalek, i);
+            }
+        }
+        else{
+            for(int i = 0; i < startingDaleksAmount; i++) {
+                addEntityToBoardOnRandomPosition(new Dalek(getRandomVector(),
+                        this.board.getEntityMoveSubject(),
+                        this.board.getDeadDaleksSubject(),
+                        this.visitorService.getDalekVisitor()));
+            }
         }
     }
 
-    public void start(){
+    public void start(boolean campaignMode){
+        this.campaignMode = campaignMode;
+        if(campaignMode)
+            openReader();
+
         addDoctorToBoard();
         addDaleksToBoard();
         this.boardPresenter.updateMap(this.board.getEntities());

@@ -15,6 +15,8 @@ public class GameInitializer {
 
     private final DoctorMoveController doctorMoveController;
 
+    private boolean campaignMode = false;
+
     @Autowired
     public GameInitializer(AppController appController, Engine engine, DoctorMoveController doctorMoveController) {
         this.appController = appController;
@@ -26,6 +28,14 @@ public class GameInitializer {
         this.appController.setStage(stage);
         this.appController.initBoardView();
         this.doctorMoveController.setScene(this.appController.getStage().getScene());
-        this.engine.start();
+        this.engine.start(campaignMode);
+    }
+
+    public void turnOnCampaignMode() {
+        this.campaignMode = true;
+    }
+
+    public void turnOffCampaignMode() {
+        this.campaignMode = false;
     }
 }

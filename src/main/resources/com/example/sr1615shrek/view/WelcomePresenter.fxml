@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sr1615shrek.view.WelcomePresenter">
+   <VBox layoutY="230.0" prefHeight="40.0" prefWidth="1157.0" spacing="20" style="-fx-text-alignment: center; -fx-alignment: center" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+      <children>
+         <Text fx:id="text" text="Welcome to Daleks Game!">
+            <font>
+               <Font name="System Bold Italic" size="40.0" />
+            </font></Text>
+         <Button fx:id="randomGameBtn" onAction="#playRandom" prefHeight="24.0" prefWidth="120.0" text="Random Play" wrapText="true" />
+         <Button fx:id="campaignModeBtn" onAction="#playCampaignMode" prefHeight="24.0" prefWidth="120.0" text="Campaign Mode" wrapText="true" />
+      </children>
+   </VBox>
+</AnchorPane>

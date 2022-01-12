@@ -36,11 +36,37 @@ public class AppController {
         stage.show();
     }
 
+    public void initWelcomeView(){
+        Parent root = fxWeaver.loadView(WelcomePresenter.class);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void initCampaignModeView(){
+        Parent root = fxWeaver.loadView(CampaignModePresenter.class);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void initNextLevelView(){
+        Parent root = fxWeaver.loadView(NextLevelPresenter.class);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+
     public void setStage(Stage stage){
         this.stage = stage;
     }
 
     public Stage getStage(){
         return this.stage;
+    }
+
+    public CampaignModePresenter getCampaignModePresenter(){
+        return fxWeaver.getBean(CampaignModePresenter.class);
     }
 }

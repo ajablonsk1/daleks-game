@@ -120,6 +120,10 @@ public class BoardPresenter {
         this.appController.initGameOverView(GAME_WIN_TEXT);
     }
 
+    public void showPopUpWindowForWinInCampaignMode(){
+        this.appController.initNextLevelView();
+    }
+
     // Function to update the visualisation of entities
     public void updateMap(List<Entity> entities){
         this.entities = entities;

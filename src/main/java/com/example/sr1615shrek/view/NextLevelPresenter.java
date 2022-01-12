@@ -1,23 +1,18 @@
 package com.example.sr1615shrek.view;
 
 import com.example.sr1615shrek.game.GameInitializer;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.text.Text;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @FxmlView
 @Component
-public class GameOverController {
+public class NextLevelPresenter {
 
     @FXML
-    public Text text;
-
-    @FXML
-    public Button button;
+    public Button nextLvlBtn;
 
     @FXML
     public Button home;
@@ -31,21 +26,20 @@ public class GameOverController {
     }
 
     @Autowired
-    public GameOverController(AppController appController,
+    public NextLevelPresenter(AppController appController,
                               GameInitializer startGame){
         this.appController = appController;
         this.startGame = startGame;
     }
 
-    public void playAgain(){
-        this.startGame.startGame(this.appController.getStage());
-    }
 
-    public void setInfoText(String text){
-        this.text.setText(text);
+    public void goToNextLevel() {
+        this.appController.initCampaignModeView();
+        this.appController.getCampaignModePresenter().nextLevel();
     }
 
     public void goToHomePage() {
+        this.appController.getCampaignModePresenter().nextLevel();
         this.appController.initWelcomeView();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.sr1615shrek.view;
 
+import com.example.sr1615shrek.GameApplication;
 import com.example.sr1615shrek.game.GameInitializer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,41 +12,38 @@ import org.springframework.stereotype.Component;
 
 @FxmlView
 @Component
-public class GameOverController {
+public class WelcomePresenter {
 
+    private final AppController appController;
+    private final GameInitializer startGame;
     @FXML
     public Text text;
 
     @FXML
-    public Button button;
+    public Button randomGameBtn;
 
     @FXML
-    public Button home;
-
-    private final AppController appController;
-
-    private GameInitializer startGame;
+    public Button campaignModeBtn;
 
     @FXML
     private void initialize(){
     }
 
     @Autowired
-    public GameOverController(AppController appController,
+    public WelcomePresenter(AppController appController,
                               GameInitializer startGame){
         this.appController = appController;
         this.startGame = startGame;
     }
 
-    public void playAgain(){
+
+    public void playRandom() {
+        this.startGame.turnOffCampaignMode();
         this.startGame.startGame(this.appController.getStage());
     }
 
-    public void setInfoText(String text){
-        this.text.setText(text);
-    }
-
-    public void goToHomePage() {
-        this.appController.initWelcomeView();
+    public void playCampaignMode() {
+        this.startGame.turnOnCampaignMode();
+        this.appController.initCampaignModeView();
     }
 }
