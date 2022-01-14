@@ -35,8 +35,11 @@ public class GameOverController {
         this.appController = this.startGame.getAppController();
     }
 
-    public void playAgain(){        // TODO: think how to start new game looking at GameType
-        this.startGame.startGameRandom(this.appController.getStage());
+    public void playAgain(){
+        switch (this.appController.getCurrentGameType()) {
+            case RANDOM -> this.startGame.startGameRandom(this.appController.getStage());
+            case CAMPAIGN -> this.appController.initCampaignModeView();
+        }
     }
 
     public void setInfoText(String text){

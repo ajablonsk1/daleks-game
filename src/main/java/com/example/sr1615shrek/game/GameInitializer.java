@@ -34,9 +34,9 @@ public class GameInitializer {
         this.engine.startRandom();
     }
 
-    public void startGameCampaign(Stage stage, String pathToLevelSettings) {
+    public void startGameCampaign(Stage stage, int levelID) {
         this.initBeforeStartGame(stage, GameType.CAMPAIGN);
-        this.engine.startCampaign(pathToLevelSettings);
+        this.engine.startCampaign(levelID);
     }
 
     public AppController getAppController() {

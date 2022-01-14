@@ -20,10 +20,10 @@ public class LevelsMapsReader {
 
     private Vector2d doctorPosition;
 
-    private static String resourcesPath = "src/main/resources/levelsMaps/";
+    private static final String resourcesPath = "src/main/resources/levelsMaps/";
 
-    public LevelsMapsReader(String fileName) {
-        this.fileName = fileName;
+    public LevelsMapsReader(int levelID) {
+        this.fileName = levelID + ".txt";
 
         openAndReadFile();
 

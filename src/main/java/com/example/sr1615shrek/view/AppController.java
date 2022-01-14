@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -15,9 +16,11 @@ public class AppController {
 
     private final FxWeaver fxWeaver;
 
-    private static final String GAME_OVER_TEXT = "Game over!";
+    @Value("${appController.gameOverText}")
+    private String GAME_OVER_TEXT;
 
-    private static final String GAME_WIN_TEXT  = "You win!";
+    @Value("${appController.gameWinText}")
+    private String GAME_WIN_TEXT;
 
     private GameType currentGameType = GameType.RANDOM;
 
@@ -36,7 +39,7 @@ public class AppController {
 
     public void initGameOverViewIfWin() {
         switch (currentGameType) {
-            case RANDOM -> initGameOverView(GAME_OVER_TEXT);
+            case RANDOM -> initGameOverView(GAME_WIN_TEXT);
             case CAMPAIGN -> initNextLevelView();
         }
     }

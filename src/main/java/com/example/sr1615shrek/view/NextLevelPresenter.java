@@ -20,6 +20,7 @@ public class NextLevelPresenter {
 
     @FXML
     private void initialize(){
+        this.appController.nextLevel();
     }
 
     @Autowired
@@ -28,12 +29,10 @@ public class NextLevelPresenter {
     }
 
     public void goToNextLevel() {
-        this.appController.nextLevel();
         this.appController.initCampaignModeView();
     }
 
     public void goToHomePage() {
-        this.appController.nextLevel();
         this.appController.initWelcomeView();
     }
 }

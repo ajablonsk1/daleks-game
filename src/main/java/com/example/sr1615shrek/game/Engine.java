@@ -50,8 +50,8 @@ public class Engine {
         this.board.getDeadDaleksSubject().subscribe(this::onDalekDeath);
     }
 
-    private void openReader(String pathToLevelSettings){
-        reader = new LevelsMapsReader(pathToLevelSettings);
+    private void openReader(int levelID){
+        reader = new LevelsMapsReader(levelID);
     }
 
     private boolean isGameWin() {
@@ -144,8 +144,8 @@ public class Engine {
         updateBoardPresenter();
     }
 
-    public void startCampaign(String pathToLevelSettings) {
-        openReader(pathToLevelSettings);
+    public void startCampaign(int levelID) {
+        openReader(levelID);
 
         addDoctorToBoardFromFile();
         addDaleksToBoardFromFile();

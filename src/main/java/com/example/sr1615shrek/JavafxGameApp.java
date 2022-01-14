@@ -1,6 +1,5 @@
 package com.example.sr1615shrek;
 
-import com.example.sr1615shrek.game.GameInitializer;
 import com.example.sr1615shrek.view.AppController;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -12,8 +11,6 @@ public class JavafxGameApp extends Application {
 
     private ConfigurableApplicationContext applicationContext;
 
-    //private GameInitializer startGame;
-
     @Override
     public void init() {
         String[] args = getParameters().getRaw().toArray(new String[0]);
@@ -24,9 +21,7 @@ public class JavafxGameApp extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
-//        this.startGame = applicationContext.getBean(GameInitializer.class);
-//        startGame.startGame(stage);
+    public void start(Stage stage) {
         AppController appController = applicationContext.getBean(AppController.class);
         appController.setStage(stage);
         appController.initWelcomeView();

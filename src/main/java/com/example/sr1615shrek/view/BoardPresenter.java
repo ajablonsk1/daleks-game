@@ -33,7 +33,7 @@ public class BoardPresenter {
 
     private List<Entity> entities;
 
-    private AppController appController;
+    private final AppController appController;
 
     private final ImageService imageService;
 

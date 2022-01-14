@@ -12,6 +12,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -36,25 +37,36 @@ public class CampaignModePresenter {
 
     private final GameInitializer startGame;
 
-    private final static int IMAGE_SIZE = 80;
+    @Value("${campaignModePresenter.imageSize}")
+    private int IMAGE_SIZE;
 
-    private int lvlNumber = 0;
+    private int levelID = 9;
 
     private final Map<Integer, Vector2d> circleLvlPosition = new HashMap<>();
 
     private List<Node> circles;
 
-    private static String playerImagePath = "images/shrek_face.png";
+    @Value("${campaignModePresenter.maxLevelID}")
+    private int maxLevelID;
 
-    private static String congratulationForEndOfCampaignString = "Congratulations, you have completed the campaign mode!";
+    @Value("${campaignModePresenter.playerImagePath}")
+    private String playerImagePath;
 
-    private static int gameCompleteTextPositionX = 180;
+    @Value("${campaignModePresenter.congratulationForEndOfCampaignString}")
+    private String congratulationForEndOfCampaignString;
 
-    private static int gameCompleteTextPositionY = 800;
+    @Value("${campaignModePresenter.gameCompleteTextPositionX}")
+    private int gameCompleteTextPositionX;
+
+    @Value("${campaignModePresenter.gameCompleteTextPositionY}")
+    private int gameCompleteTextPositionY;
 
     @FXML
     private void initialize(){
-        circles = anchorPane.getChildren().stream().filter(Circle.class::isInstance).toList();
+        this.circles = this.anchorPane.getChildren()
+                .stream()
+                .filter(Circle.class::isInstance)
+                .toList();
 
         fillTheMap();
         loadImage();
@@ -90,8 +102,8 @@ public class CampaignModePresenter {
             circleLvlPosition.put(i, calculateCircleCenter((Circle) circles.get(i)));
     }
 
-    public void play() {
-        this.startGame.startGameCampaign(this.appController.getStage(), getLevelPath());
+    public void playCampaign() {
+        this.startGame.startGameCampaign(this.appController.getStage(), levelID);
     }
 
     public void goHome() {
@@ -99,13 +111,13 @@ public class CampaignModePresenter {
     }
 
     private void movePlayerIcon(){
-        Vector2d playerPosition = circleLvlPosition.get(lvlNumber);
+        Vector2d playerPosition = circleLvlPosition.get(Math.min(this.levelID, this.maxLevelID-1));
         imageView.setX(playerPosition.getX());
         imageView.setY(playerPosition.getY());
     }
 
     private void gameComplete(){
-        if(lvlNumber >= 9){
+        if(this.levelID >= this.maxLevelID){
             playBtn.setDisable(true);
 
             Text endGameText = new Text(congratulationForEndOfCampaignString);
@@ -116,11 +128,7 @@ public class CampaignModePresenter {
         }
     }
 
-    private String getLevelPath() {
-        return lvlNumber + ".txt";
-    }
-
     public void nextLevel(){
-        this.lvlNumber = Math.max(this.lvlNumber+1, 9);
+        this.levelID = Math.min(this.levelID +1, this.maxLevelID);
     }
 }
