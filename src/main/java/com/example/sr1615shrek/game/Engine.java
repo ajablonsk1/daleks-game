@@ -1,17 +1,14 @@
 package com.example.sr1615shrek.game;
 
 import com.example.sr1615shrek.collisions.CollisionDetector;
-import com.example.sr1615shrek.collisions.visitors.DalekVisitor;
-import com.example.sr1615shrek.collisions.visitors.DoctorVisitor;
-import com.example.sr1615shrek.collisions.visitors.JunkVisitor;
 import com.example.sr1615shrek.collisions.visitors.VisitorService;
+import com.example.sr1615shrek.config.database.LevelsMapsReader;
 import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.model.Dalek;
 import com.example.sr1615shrek.entity.model.Doctor;
 import com.example.sr1615shrek.entity.model.Junk;
 import com.example.sr1615shrek.entity.position.Direction;
 import com.example.sr1615shrek.entity.position.Vector2d;
-import com.example.sr1615shrek.view.AppController;
 import com.example.sr1615shrek.view.BoardPresenter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,8 +28,6 @@ public class Engine {
 
     private final VisitorService visitorService;
 
-    private LevelsMapsReader reader;
-
     @Value("${engine.startingDaleksAmount}")
     private int startingDaleksAmount;
 
@@ -48,10 +43,6 @@ public class Engine {
         this.collisionDetector = collisionDetector;
         this.visitorService = visitorService;
         this.board.getDeadDaleksSubject().subscribe(this::onDalekDeath);
-    }
-
-    private void openReader(int levelID){
-        reader = new LevelsMapsReader(levelID);
     }
 
     private boolean isGameWin() {
@@ -96,10 +87,6 @@ public class Engine {
         board.addEntity(entity);
     }
 
-    private Vector2d loadDoctorPosition(){
-        return reader.getDoctorPosition();
-    }
-
     private void addDoctorOnPosition(Vector2d position) {
         Doctor doctor = new Doctor(position,
                 this.board.getEntityMoveSubject(),
@@ -113,8 +100,8 @@ public class Engine {
         addDoctorOnPosition(getRandomVector());
     }
 
-    private void addDoctorToBoardFromFile() {
-        addDoctorOnPosition(loadDoctorPosition());
+    private void addDoctorToBoardFromFile(int levelID) {
+        addDoctorOnPosition(LevelsMapsReader.getDoctorPosition(levelID).get());
     }
 
     private void addDaleksToBoardRandom(){
@@ -126,8 +113,8 @@ public class Engine {
         }
     }
 
-    private void addDaleksToBoardFromFile() {
-       reader.getDaleksPositions().forEach(position -> board.addEntity(new Dalek(position,
+    private void addDaleksToBoardFromFile(int levelID) {
+       LevelsMapsReader.getDaleksPositions(levelID).forEach(position -> board.addEntity(new Dalek(position,
                    this.board.getEntityMoveSubject(),
                    this.board.getDeadDaleksSubject(),
                    this.visitorService.getDalekVisitor()))
@@ -145,10 +132,8 @@ public class Engine {
     }
 
     public void startCampaign(int levelID) {
-        openReader(levelID);
-
-        addDoctorToBoardFromFile();
-        addDaleksToBoardFromFile();
+        addDoctorToBoardFromFile(levelID);
+        addDaleksToBoardFromFile(levelID);
         updateBoardPresenter();
     }
 

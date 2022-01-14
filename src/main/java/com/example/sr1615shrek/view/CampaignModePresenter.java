@@ -40,7 +40,7 @@ public class CampaignModePresenter {
     @Value("${campaignModePresenter.imageSize}")
     private int IMAGE_SIZE;
 
-    private int levelID = 9;
+    private int levelID = 0;
 
     private final Map<Integer, Vector2d> circleLvlPosition = new HashMap<>();
 

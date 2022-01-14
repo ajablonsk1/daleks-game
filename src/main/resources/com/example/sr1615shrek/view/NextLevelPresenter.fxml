@@ -4,15 +4,21 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sr1615shrek.view.NextLevelPresenter">
+<AnchorPane prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sr1615shrek.view.NextLevelPresenter">
     <VBox layoutY="430.0" prefHeight="141.0" prefWidth="1157.0" spacing="20" style="-fx-text-alignment: center; -fx-alignment: center" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
         <children>
             <Text text="Level Complete">
                 <font>
                     <Font name="System Bold Italic" size="40.0" />
                 </font></Text>
-            <Button fx:id="nextLvlBtn" onAction="#goToNextLevel" prefHeight="24.0" prefWidth="120.0" text="NEXT LEVEL!" wrapText="true" />
-            <Button fx:id="home" onAction="#goToHomePage" prefHeight="24.0" prefWidth="120.0" text="HOME PAGE" wrapText="true" />
+            <Button fx:id="nextLvlBtn" onAction="#goToNextLevel" prefHeight="53.0" prefWidth="256.0" text="NEXT LEVEL!" wrapText="true">
+            <font>
+               <Font size="28.0" />
+            </font></Button>
+            <Button fx:id="home" onAction="#goToHomePage" prefHeight="53.0" prefWidth="256.0" text="HOME PAGE" wrapText="true">
+            <font>
+               <Font size="28.0" />
+            </font></Button>
         </children>
     </VBox>
 </AnchorPane>
