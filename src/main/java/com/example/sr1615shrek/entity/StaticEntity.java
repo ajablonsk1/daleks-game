@@ -10,6 +10,8 @@ public abstract class StaticEntity implements Entity{
         this.position = position;
     }
 
+    public StaticEntity(){}
+
     public Vector2d getPosition() {
         return position;
     }

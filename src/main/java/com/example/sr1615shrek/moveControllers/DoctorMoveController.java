@@ -34,6 +34,8 @@ public class DoctorMoveController {
                 case NUMPAD1, Z-> engine.startTurn(Direction.NORTHWEST);
                 case NUMPAD4, A -> engine.startTurn(Direction.WEST);
                 case NUMPAD7, Q -> engine.startTurn(Direction.SOUTHWEST);
+                case R -> engine.useTimeReverse();
+                case T -> engine.useTeleport();
             }
         });
     }

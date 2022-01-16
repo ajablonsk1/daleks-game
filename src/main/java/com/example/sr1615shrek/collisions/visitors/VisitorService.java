@@ -12,13 +12,21 @@ public class VisitorService {
 
     private final JunkVisitor junkVisitor;
 
+    private final TeleportVisitor teleportVisitor;
+
+    private final TimeReverseVisitor timeReverseVisitor;
+
     @Autowired
     public VisitorService(DalekVisitor dalekVisitor,
                           DoctorVisitor doctorVisitor,
-                          JunkVisitor junkVisitor){
+                          JunkVisitor junkVisitor,
+                          TeleportVisitor teleportVisitor,
+                          TimeReverseVisitor timeReverseVisitor){
         this.dalekVisitor = dalekVisitor;
         this.doctorVisitor = doctorVisitor;
         this.junkVisitor = junkVisitor;
+        this.teleportVisitor = teleportVisitor;
+        this.timeReverseVisitor = timeReverseVisitor;
     }
 
     public DalekVisitor getDalekVisitor(){
@@ -27,6 +35,14 @@ public class VisitorService {
 
     public DoctorVisitor getDoctorVisitor(){
         return this.doctorVisitor;
+    }
+
+    public TeleportVisitor getTeleportVisitor() {
+        return teleportVisitor;
+    }
+
+    public TimeReverseVisitor getTimeReverseVisitor() {
+        return timeReverseVisitor;
     }
 
     public JunkVisitor getJunkVisitor() {

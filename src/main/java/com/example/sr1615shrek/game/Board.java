@@ -6,6 +6,8 @@ import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.model.Dalek;
 import com.example.sr1615shrek.entity.model.Doctor;
 import com.example.sr1615shrek.entity.model.Junk;
+import com.example.sr1615shrek.entity.model.powerups.Teleport;
+import com.example.sr1615shrek.entity.model.powerups.TimeReverse;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
@@ -27,6 +29,10 @@ public class Board {
 
     private final BehaviorSubject<Dalek> deadDaleksSubject;
 
+    private final BehaviorSubject<Teleport> deadTeleportSubject;
+
+    private final BehaviorSubject<TimeReverse> deadTimeReverseSubject;
+
     private final VisitorService visitorService;
 
     public Board(int width,
@@ -34,12 +40,16 @@ public class Board {
                  BehaviorSubject<List<Entity>> collisionSubject,
                  BehaviorSubject<DynamicEntity> entityMoveSubject,
                  BehaviorSubject<Dalek> deadDaleksSubject,
+                 BehaviorSubject<Teleport> deadTeleportSubject,
+                 BehaviorSubject<TimeReverse> deadTimeReverseSubject,
                  VisitorService visitorService) {
         this.height = height;
         this.width = width;
         this.collisionSubject = collisionSubject;
         this.entityMoveSubject = entityMoveSubject;
         this.deadDaleksSubject = deadDaleksSubject;
+        this.deadTeleportSubject = deadTeleportSubject;
+        this.deadTimeReverseSubject = deadTimeReverseSubject;
         this.visitorService = visitorService;
 
         this.entityMoveSubject.subscribe(this::onEntityPositionChange);
@@ -103,6 +113,14 @@ public class Board {
 
     public BehaviorSubject<Dalek> getDeadDaleksSubject() {
         return deadDaleksSubject;
+    }
+
+    public BehaviorSubject<Teleport> getDeadTeleportSubject() {
+        return deadTeleportSubject;
+    }
+
+    public BehaviorSubject<TimeReverse> getDeadTimeReverseSubject() {
+        return deadTimeReverseSubject;
     }
 }
 

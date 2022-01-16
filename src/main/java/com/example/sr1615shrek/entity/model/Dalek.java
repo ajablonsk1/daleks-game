@@ -6,9 +6,6 @@ import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
-import javafx.scene.image.Image;
-
-import java.util.Objects;
 
 public class Dalek extends DynamicEntity {
 
