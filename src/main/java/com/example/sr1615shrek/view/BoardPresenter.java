@@ -1,16 +1,17 @@
 package com.example.sr1615shrek.view;
 
 import com.example.sr1615shrek.entity.Entity;
+import com.example.sr1615shrek.entity.model.Doctor;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import com.example.sr1615shrek.game.Board;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Controller
 @FxmlView
@@ -26,6 +26,12 @@ public class BoardPresenter {
 
     @FXML
     public GridPane grid;
+
+    @FXML
+    public Text teleportCounter;
+
+    @FXML
+    public Text timeReverseCounter;
 
     private final Board board;
 
@@ -98,14 +104,6 @@ public class BoardPresenter {
         private void putBlank() {
             imageView.setImage(null);
         }
-
-        public int getX() {
-            return x;
-        }
-
-        public int getY() {
-            return y;
-        }
     }
 
     public void showPopUpWindowForLose() {
@@ -116,10 +114,6 @@ public class BoardPresenter {
         this.appController.initGameOverViewIfWin();
     }
 
-    public void showPopUpWindowForWinInCampaignMode(){
-        this.appController.initNextLevelView();
-    }
-
     // Function to update the visualisation of entities
     public void updateMap(List<Entity> entities){
         this.entities = entities;
@@ -127,5 +121,12 @@ public class BoardPresenter {
         this.entities.forEach(entity -> {
             tiles.get(entity.getPosition()).draw(entity);
         });
+        updatePowerUpsCounters();
+    }
+
+    private void updatePowerUpsCounters(){
+        Doctor doctor = this.board.getDoctor();
+        teleportCounter.setText(String.valueOf(doctor.getTeleportNumber()));
+        timeReverseCounter.setText(String.valueOf(doctor.getTimeReverseNumber()));
     }
 }

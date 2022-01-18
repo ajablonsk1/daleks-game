@@ -75,4 +75,16 @@ public class Doctor extends DynamicEntity {
     public void addTimeReverse(TimeReverse timeReverse){
         timeReverseList.add(timeReverse);
     }
+
+    public int getTeleportNumber(){
+        return this.teleportList.size();
+    }
+
+    public int getTimeReverseNumber(){
+        return this.timeReverseList.size();
+    }
+
+    public TimeReverse getTimeReverse(){
+        return this.timeReverseList.get(0);
+    }
 }

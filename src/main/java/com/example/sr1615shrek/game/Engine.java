@@ -103,12 +103,8 @@ public class Engine {
 
     private void addDoctorOnPosition(Vector2d position) {
         Doctor doctor = new Doctor(position,
-                this.board.getEntityMoveSubject(),
-    private void addDoctorToBoard(){
-        Doctor doctor = new Doctor(getRandomVector(),
                 this.subjectService.getEntityMoveSubject(),
                 this.visitorService.getDoctorVisitor());
-
         addEntityToBoardOnRandomPosition(doctor);
         this.board.setDoctor(doctor);
     }
@@ -132,8 +128,8 @@ public class Engine {
 
     private void addDaleksToBoardFromFile(int levelID) {
        LevelsMapsReader.getDaleksPositions(levelID).forEach(position -> board.addEntity(new Dalek(position,
-                   this.board.getEntityMoveSubject(),
-                   this.board.getDeadDaleksSubject(),
+                   this.subjectService.getEntityMoveSubject(),
+                   this.subjectService.getDeadDaleksSubject(),
                    this.visitorService.getDalekVisitor()))
        );
     }
@@ -186,20 +182,19 @@ public class Engine {
     }
 
     public void useTimeReverse(){
-        if(board.getDoctor().getTimeReverseList().size() > 0){
-            System.out.println(this.board.getEntities().size());
+        if(!board.getDoctor().getTimeReverseList().isEmpty()){
+            TimeReverse timeReverse = this.board.getDoctor().getTimeReverse();
             this.board.getEntities()
                     .stream()
                     .filter(DynamicEntity.class::isInstance)
-                    .forEach(entity -> this.board.getDoctor().getTimeReverseList().get(0).reverseTime((DynamicEntity) entity));
+                    .forEach(entity -> timeReverse.reverseTime((DynamicEntity) entity));
             this.board.getDoctor().useTimeReverse();
         }
-        this.board.getDoctor().getLastPositions().forEach(System.out::println);
         this.boardPresenter.updateMap(this.board.getEntities());
     }
 
     public void useTeleport(){
-        if(board.getDoctor().getTeleportList().size() > 0){
+        if(!board.getDoctor().getTeleportList().isEmpty()){
             board.getDoctor().useTeleport();
         }
         this.boardPresenter.updateMap(this.board.getEntities());

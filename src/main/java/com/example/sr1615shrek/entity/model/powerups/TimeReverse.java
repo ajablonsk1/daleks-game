@@ -28,7 +28,7 @@ public class TimeReverse extends StaticEntity {
     public TimeReverse(){}
 
     public void reverseTime(DynamicEntity dynamicEntity){
-        if(dynamicEntity.getLastPositions().size() > 0){
+        if(!dynamicEntity.getLastPositions().isEmpty()){
             Vector2d lastPosition = dynamicEntity.getLastPositions().get(dynamicEntity.getLastPositions().size()-1);
             dynamicEntity.getLastPositions().remove(dynamicEntity.getLastPositions().size()-1);
             dynamicEntity.moveTimeReverse(lastPosition);
