@@ -7,10 +7,12 @@ import com.example.sr1615shrek.entity.model.Dalek;
 import com.example.sr1615shrek.entity.model.powerups.Teleport;
 import com.example.sr1615shrek.entity.model.powerups.TimeReverse;
 import com.example.sr1615shrek.game.Board;
+import com.example.sr1615shrek.game.SubjectService;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -24,21 +26,27 @@ public class AppConfig {
     private int height;
 
     @Bean
-    public Board board(VisitorService visitorService){
+    public SubjectService subjectService(){
         BehaviorSubject<List<Entity>> collisionSubject = BehaviorSubject.create();
         BehaviorSubject<DynamicEntity> entityMoveSubject = BehaviorSubject.create();
         BehaviorSubject<Dalek> deadDaleksSubject = BehaviorSubject.create();
         BehaviorSubject<Teleport> deadTeleportSubject = BehaviorSubject.create();
         BehaviorSubject<TimeReverse> deadTimeReverseSubject = BehaviorSubject.create();
 
-        return new Board(width,
-                height,
-                collisionSubject,
+        return new SubjectService(collisionSubject,
                 entityMoveSubject,
                 deadDaleksSubject,
                 deadTeleportSubject,
-                deadTimeReverseSubject,
-                visitorService);
+                deadTimeReverseSubject);
+    }
+
+    @Bean
+    public Board board(VisitorService visitorService, SubjectService subjectService){
+
+        return new Board(width,
+                height,
+                visitorService,
+                subjectService);
     }
 }
 

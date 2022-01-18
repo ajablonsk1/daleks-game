@@ -23,36 +23,20 @@ public class Board {
 
     private final int width;
 
-    private final BehaviorSubject<List<Entity>> collisionSubject;
-
-    private final BehaviorSubject<DynamicEntity> entityMoveSubject;
-
-    private final BehaviorSubject<Dalek> deadDaleksSubject;
-
-    private final BehaviorSubject<Teleport> deadTeleportSubject;
-
-    private final BehaviorSubject<TimeReverse> deadTimeReverseSubject;
-
     private final VisitorService visitorService;
+
+    private final SubjectService subjectService;
 
     public Board(int width,
                  int height,
-                 BehaviorSubject<List<Entity>> collisionSubject,
-                 BehaviorSubject<DynamicEntity> entityMoveSubject,
-                 BehaviorSubject<Dalek> deadDaleksSubject,
-                 BehaviorSubject<Teleport> deadTeleportSubject,
-                 BehaviorSubject<TimeReverse> deadTimeReverseSubject,
-                 VisitorService visitorService) {
+                 VisitorService visitorService,
+                 SubjectService subjectService) {
         this.height = height;
         this.width = width;
-        this.collisionSubject = collisionSubject;
-        this.entityMoveSubject = entityMoveSubject;
-        this.deadDaleksSubject = deadDaleksSubject;
-        this.deadTeleportSubject = deadTeleportSubject;
-        this.deadTimeReverseSubject = deadTimeReverseSubject;
         this.visitorService = visitorService;
+        this.subjectService = subjectService;
 
-        this.entityMoveSubject.subscribe(this::onEntityPositionChange);
+        subjectService.getEntityMoveSubject().subscribe(this::onEntityPositionChange);
 
     }
 
@@ -74,11 +58,11 @@ public class Board {
 
         this.entities.get(entity.getPosition()).add(entity);
 
-        this.collisionSubject.onNext(entities.get(entity.getPosition()));
+        subjectService.getCollisionSubject().onNext(entities.get(entity.getPosition()));
     }
 
     public BehaviorSubject<List<Entity>> getCollisionSubject() {
-        return this.collisionSubject;
+        return subjectService.getCollisionSubject();
     }
 
     private void onEntityPositionChange(DynamicEntity dynamicEntity){
@@ -99,10 +83,6 @@ public class Board {
         return width;
     }
 
-    public BehaviorSubject<DynamicEntity> getEntityMoveSubject() {
-        return entityMoveSubject;
-    }
-
     public void setDoctor(Doctor doctor){
         this.doctor = doctor;
     }
@@ -111,16 +91,8 @@ public class Board {
         return this.doctor;
     }
 
-    public BehaviorSubject<Dalek> getDeadDaleksSubject() {
-        return deadDaleksSubject;
-    }
-
-    public BehaviorSubject<Teleport> getDeadTeleportSubject() {
-        return deadTeleportSubject;
-    }
-
-    public BehaviorSubject<TimeReverse> getDeadTimeReverseSubject() {
-        return deadTimeReverseSubject;
+    public SubjectService getSubjectService() {
+        return subjectService;
     }
 }
 

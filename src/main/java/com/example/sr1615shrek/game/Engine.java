@@ -35,6 +35,8 @@ public class Engine {
 
     private VisitorService visitorService;
 
+    private final SubjectService subjectService;
+
     @Value("${engine.startingDaleksAmount}")
     private int startingDaleksAmount;
 
@@ -46,14 +48,16 @@ public class Engine {
     public Engine(BoardPresenter boardPresenter,
                   Board board,
                   CollisionDetector collisionDetector,
-                  VisitorService visitorService){
+                  VisitorService visitorService,
+                  SubjectService subjectService){
         this.board = board;
         this.boardPresenter = boardPresenter;
         this.collisionDetector = collisionDetector;
         this.visitorService = visitorService;
-        this.board.getDeadDaleksSubject().subscribe(this::onEntityDeath);
-        this.board.getDeadTeleportSubject().subscribe(this::onEntityDeath);
-        this.board.getDeadTimeReverseSubject().subscribe(this::onEntityDeath);
+        this.subjectService = subjectService;
+        this.subjectService.getDeadDaleksSubject().subscribe(this::onDaleksDeath);
+        this.subjectService.getDeadTeleportSubject().subscribe(this::onTeleportDeath);
+        this.subjectService.getDeadTimeReverseSubject().subscribe(this::onTimeReverseDeath);
     }
 
 
@@ -101,7 +105,7 @@ public class Engine {
 
     private void addDoctorToBoard(){
         Doctor doctor = new Doctor(getRandomVector(),
-                this.board.getEntityMoveSubject(),
+                this.subjectService.getEntityMoveSubject(),
                 this.visitorService.getDoctorVisitor());
 
         addEntityToBoardOnRandomPosition(doctor);
@@ -111,8 +115,8 @@ public class Engine {
     private void addDaleksToBoard(){
         for(int i = 0; i < startingDaleksAmount; i++) {
             addEntityToBoardOnRandomPosition(new Dalek(getRandomVector(),
-                    this.board.getEntityMoveSubject(),
-                    this.board.getDeadDaleksSubject(),
+                    this.subjectService.getEntityMoveSubject(),
+                    this.subjectService.getDeadDaleksSubject(),
                     this.visitorService.getDalekVisitor()));
         }
     }
@@ -136,21 +140,23 @@ public class Engine {
         this.isGameEnd();
     }
 
-    private void onEntityDeath(Entity entity){
-        Vector2d position = entity.getPosition();
-        if(entity.getClass() == Teleport.class){
-            this.board.getDoctor().getTeleportList().add((Teleport) entity);
+    private void onDaleksDeath(Dalek dalek){
+        Vector2d position = dalek.getPosition();
+        this.board.removeEntityFromBoard(dalek);
+        if (this.board.getEntitiesOnVector(position).isEmpty()) {
+            Junk junk = new Junk(position, this.visitorService.getJunkVisitor());
+            this.board.getEntitiesOnVector(position).add(junk);
         }
-        if(entity.getClass() == TimeReverse.class){
-            this.board.getDoctor().getTimeReverseList().add((TimeReverse) entity);
-        }
-        this.board.removeEntityFromBoard(entity);
-        if(entity.getClass() == Dalek.class) {
-            if (this.board.getEntitiesOnVector(position).isEmpty()) {
-                Junk junk = new Junk(position, this.visitorService.getJunkVisitor());
-                this.board.getEntitiesOnVector(position).add(junk);
-            }
-        }
+    }
+
+    private void onTeleportDeath(Teleport teleport){
+        this.board.removeEntityFromBoard(teleport);
+        this.board.getDoctor().addTeleport(teleport);
+    }
+
+    private void onTimeReverseDeath(TimeReverse timeReverse){
+        this.board.removeEntityFromBoard(timeReverse);
+        this.board.getDoctor().addTimeReverse(timeReverse);
     }
 
     public void useTimeReverse(){
@@ -180,12 +186,12 @@ public class Engine {
             if(x == 0){
                 addEntityToBoardOnRandomPosition(new Teleport(getRandomVector(),
                         this.visitorService.getTeleportVisitor(),
-                        this.board.getDeadTeleportSubject(),
+                        this.subjectService.getDeadTeleportSubject(),
                         this.board));
             } else{
                 addEntityToBoardOnRandomPosition(new TimeReverse(getRandomVector(),
                         this.visitorService.getTimeReverseVisitor(),
-                        this.board.getDeadTimeReverseSubject()));
+                        this.subjectService.getDeadTimeReverseSubject()));
             }
         }
     }
