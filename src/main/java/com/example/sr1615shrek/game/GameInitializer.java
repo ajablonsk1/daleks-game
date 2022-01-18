@@ -22,10 +22,24 @@ public class GameInitializer {
         this.doctorMoveController = doctorMoveController;
     }
 
-    public void startGame(Stage stage){
+    private void initBeforeStartGame(Stage stage, GameType gameType) {
         this.appController.setStage(stage);
+        this.appController.setCurrentGameType(gameType);
         this.appController.initBoardView();
         this.doctorMoveController.setScene(this.appController.getStage().getScene());
-        this.engine.start();
+    }
+
+    public void startGameRandom(Stage stage){
+        this.initBeforeStartGame(stage, GameType.RANDOM);
+        this.engine.startRandom();
+    }
+
+    public void startGameCampaign(Stage stage, int levelID) {
+        this.initBeforeStartGame(stage, GameType.CAMPAIGN);
+        this.engine.startCampaign(levelID);
+    }
+
+    public AppController getAppController() {
+        return appController;
     }
 }

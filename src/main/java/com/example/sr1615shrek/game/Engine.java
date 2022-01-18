@@ -1,11 +1,9 @@
 package com.example.sr1615shrek.game;
 
 import com.example.sr1615shrek.collisions.CollisionDetector;
-import com.example.sr1615shrek.collisions.visitors.DalekVisitor;
-import com.example.sr1615shrek.collisions.visitors.DoctorVisitor;
-import com.example.sr1615shrek.collisions.visitors.JunkVisitor;
 import com.example.sr1615shrek.collisions.visitors.VisitorService;
 import com.example.sr1615shrek.entity.DynamicEntity;
+import com.example.sr1615shrek.config.database.LevelsMapsReader;
 import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.StaticEntity;
 import com.example.sr1615shrek.entity.model.Dalek;
@@ -33,7 +31,7 @@ public class Engine {
 
     private final CollisionDetector collisionDetector;
 
-    private VisitorService visitorService;
+    private final VisitorService visitorService;
 
     private final SubjectService subjectService;
 
@@ -103,6 +101,9 @@ public class Engine {
         board.addEntity(entity);
     }
 
+    private void addDoctorOnPosition(Vector2d position) {
+        Doctor doctor = new Doctor(position,
+                this.board.getEntityMoveSubject(),
     private void addDoctorToBoard(){
         Doctor doctor = new Doctor(getRandomVector(),
                 this.subjectService.getEntityMoveSubject(),
@@ -112,7 +113,15 @@ public class Engine {
         this.board.setDoctor(doctor);
     }
 
-    private void addDaleksToBoard(){
+    private void addDoctorToBoardRandom() {
+        addDoctorOnPosition(getRandomVector());
+    }
+
+    private void addDoctorToBoardFromFile(int levelID) {
+        addDoctorOnPosition(LevelsMapsReader.getDoctorPosition(levelID).get());
+    }
+
+    private void addDaleksToBoardRandom(){
         for(int i = 0; i < startingDaleksAmount; i++) {
             addEntityToBoardOnRandomPosition(new Dalek(getRandomVector(),
                     this.subjectService.getEntityMoveSubject(),
@@ -121,12 +130,29 @@ public class Engine {
         }
     }
 
-    public void start(){
-        addDoctorToBoard();
-        addDaleksToBoard();
+    private void addDaleksToBoardFromFile(int levelID) {
+       LevelsMapsReader.getDaleksPositions(levelID).forEach(position -> board.addEntity(new Dalek(position,
+                   this.board.getEntityMoveSubject(),
+                   this.board.getDeadDaleksSubject(),
+                   this.visitorService.getDalekVisitor()))
+       );
+    }
+
+    private void updateBoardPresenter() {
         this.boardPresenter.updateMap(this.board.getEntities());
     }
 
+    public void startRandom(){
+        addDoctorToBoardRandom();
+        addDaleksToBoardRandom();
+        updateBoardPresenter();
+    }
+
+    public void startCampaign(int levelID) {
+        addDoctorToBoardFromFile(levelID);
+        addDaleksToBoardFromFile(levelID);
+        updateBoardPresenter();
+    }
 
     public void startTurn(Direction direction) {
         this.board.getDoctor().move(direction);
@@ -143,7 +169,7 @@ public class Engine {
     private void onDaleksDeath(Dalek dalek){
         Vector2d position = dalek.getPosition();
         this.board.removeEntityFromBoard(dalek);
-        if (this.board.getEntitiesOnVector(position).isEmpty()) {
+        if(this.board.getEntitiesOnVector(position).isEmpty()){
             Junk junk = new Junk(position, this.visitorService.getJunkVisitor());
             this.board.getEntitiesOnVector(position).add(junk);
         }

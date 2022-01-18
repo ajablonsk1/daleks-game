@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="anchorPane" prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sr1615shrek.view.CampaignModePresenter">
+    <Text fx:id="text" layoutX="294.0" layoutY="76.0" text="Campaing Mode" textAlignment="CENTER" wrappingWidth="411.4142150878906">
+        <font>
+            <Font name="System Bold Italic" size="40.0" />
+        </font>
+    </Text>
+
+    <Line endX="100.0" layoutX="260.0" layoutY="687.0" startX="-100.0" />
+    <Line endX="100.0" layoutX="500.0" layoutY="688.0" startX="-100.0" />
+    <Line endX="100.0" layoutX="740.0" layoutY="687.0" startX="-100.0" />
+    <Line endX="-6.0" endY="271.0" layoutX="866.0" layoutY="416.0" startX="-126.0" startY="112.0" />
+    <Line endX="100.0" layoutX="620.0" layoutY="528.0" startX="-100.0" />
+    <Line endX="100.0" layoutX="380.0" layoutY="528.0" startX="-100.0" />
+    <Line endX="35.0" endY="121.0" layoutX="225.0" layoutY="407.0" startX="155.0" startY="-41.0" />
+    <Line endX="100.0" layoutX="500.0" layoutY="366.0" startX="-100.0" />
+    <Line endX="-41.0" endY="106.0" layoutX="661.0" layoutY="260.0" startX="-161.0" startY="-43.0" />
+
+    <Circle fill="DODGERBLUE" layoutX="140.0" layoutY="687.0" radius="60.0" stroke="BLACK" strokeType="INSIDE" />
+    <Text layoutX="115.0" layoutY="695.0" text="Lvl 1" textAlignment="CENTER" wrappingWidth="50.414215087890625">
+      <font>
+         <Font name="System Bold" size="22.0" />
+      </font></Text>
+
+    <Circle fill="DODGERBLUE" layoutX="380.0" layoutY="687.0" radius="60.0" stroke="BLACK" strokeType="INSIDE" />
+    <Text layoutX="355.0" layoutY="695.0" text="Lvl 2" textAlignment="CENTER" wrappingWidth="50.414215087890625">
+        <font>
+            <Font name="System Bold" size="22.0" />
+        </font></Text>
+
+    <Circle fill="DODGERBLUE" layoutX="620.0" layoutY="687.0" radius="60.0" stroke="BLACK" strokeType="INSIDE" />
+    <Text layoutX="595.0" layoutY="695.0" text="Lvl 3" textAlignment="CENTER" wrappingWidth="50.414215087890625">
+        <font>
+            <Font name="System Bold" size="22.0" />
+        </font></Text>
+
+    <Circle fill="DODGERBLUE" layoutX="860.0" layoutY="687.0" radius="60.0" stroke="BLACK" strokeType="INSIDE" />
+    <Text layoutX="835.0" layoutY="697.0" text="Lvl 4" textAlignment="CENTER" wrappingWidth="50.414215087890625">
+        <font>
+            <Font name="System Bold" size="22.0" />
+        </font></Text>
+
+    <Circle fill="DODGERBLUE" layoutX="740.0" layoutY="528.0" radius="60.0" stroke="BLACK" strokeType="INSIDE" />
+    <Text layoutX="715.0" layoutY="536.0" text="Lvl 5" textAlignment="CENTER" wrappingWidth="50.414215087890625">
+        <font>
+            <Font name="System Bold" size="22.0" />
+        </font></Text>
+
+    <Circle fill="DODGERBLUE" layoutX="500.0" layoutY="528.0" radius="60.0" stroke="BLACK" strokeType="INSIDE" />
+    <Text layoutX="475.0" layoutY="537.0" text="Lvl 6" textAlignment="CENTER" wrappingWidth="50.414215087890625">
+        <font>
+            <Font name="System Bold" size="22.0" />
+        </font></Text>
+
+    <Circle fill="DODGERBLUE" layoutX="260.0" layoutY="528.0" radius="60.0" stroke="BLACK" strokeType="INSIDE" />
+    <Text layoutX="234.0" layoutY="536.0" text="Lvl 7" textAlignment="CENTER" wrappingWidth="50.414215087890625">
+        <font>
+            <Font name="System Bold" size="22.0" />
+        </font></Text>
+
+    <Circle fill="DODGERBLUE" layoutX="380.0" layoutY="366.0" radius="60.0" stroke="BLACK" strokeType="INSIDE" />
+    <Text layoutX="355.0" layoutY="374.0" text="Lvl 8" textAlignment="CENTER" wrappingWidth="50.414215087890625">
+        <font>
+            <Font name="System Bold" size="22.0" />
+        </font></Text>
+
+    <Circle fill="DODGERBLUE" layoutX="620.0" layoutY="366.0" radius="60.0" stroke="BLACK" strokeType="INSIDE" />
+    <Text layoutX="595.0" layoutY="374.0" text="Lvl 9" textAlignment="CENTER" wrappingWidth="50.414215087890625">
+        <font>
+            <Font name="System Bold" size="22.0" />
+        </font></Text>
+
+    <Circle fill="DODGERBLUE" layoutX="500.0" layoutY="217.0" radius="60.0" stroke="BLACK" strokeType="INSIDE" />
+    <Text layoutX="468.0" layoutY="225.0" text="Lvl 10" textAlignment="CENTER" wrappingWidth="63.414215087890625">
+        <font>
+            <Font name="System Bold" size="22.0" />
+        </font></Text>
+
+
+    <Button fx:id="playBtn" layoutX="523.0" layoutY="888.0" onAction="#playCampaign" prefHeight="53.0" prefWidth="157.0" text="PLAY!" wrapText="true">
+      <font>
+         <Font size="28.0" />
+      </font>
+    </Button>
+
+    <Button layoutX="321.0" layoutY="888.0" onAction="#goHome" prefHeight="53.0" prefWidth="180.0" text="Go home" wrapText="true">
+        <font>
+            <Font size="28.0" />
+        </font>
+    </Button>
+    <ImageView fx:id="imageView" />
+</AnchorPane>

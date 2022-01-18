@@ -18,26 +18,35 @@ public class GameOverController {
     @FXML
     public Button button;
 
+    @FXML
+    public Button home;
+
     private final AppController appController;
 
-    private GameInitializer startGame;
+    private final GameInitializer startGame;
 
     @FXML
     private void initialize(){
     }
 
     @Autowired
-    public GameOverController(AppController appController,
-                              GameInitializer startGame){
-        this.appController = appController;
+    public GameOverController(GameInitializer startGame){
         this.startGame = startGame;
+        this.appController = this.startGame.getAppController();
     }
 
     public void playAgain(){
-        this.startGame.startGame(this.appController.getStage());
+        switch (this.appController.getCurrentGameType()) {
+            case RANDOM -> this.startGame.startGameRandom(this.appController.getStage());
+            case CAMPAIGN -> this.appController.initCampaignModeView();
+        }
     }
 
     public void setInfoText(String text){
         this.text.setText(text);
+    }
+
+    public void goToHomePage() {
+        this.appController.initWelcomeView();
     }
 }
