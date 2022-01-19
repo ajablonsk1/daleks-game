@@ -1,7 +1,5 @@
-package com.example.sr1615shrek.game;
+package com.example.sr1615shrek.entity;
 
-import com.example.sr1615shrek.entity.DynamicEntity;
-import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.model.Dalek;
 import com.example.sr1615shrek.entity.model.powerups.Teleport;
 import com.example.sr1615shrek.entity.model.powerups.TimeReverse;

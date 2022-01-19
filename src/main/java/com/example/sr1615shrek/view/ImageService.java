@@ -33,7 +33,7 @@ public class ImageService {
         initMap();
     }
 
-    private void initMap(){;
+    private void initMap(){
         this.imageMap.put(Dalek.class, loadImage(DALEK_GRAPHIC_PATH));
         this.imageMap.put(Doctor.class, loadImage(DOCTOR_GRAPHIC_PATH));
         this.imageMap.put(Junk.class, loadImage(JUNK_GRAPHIC_PATH));

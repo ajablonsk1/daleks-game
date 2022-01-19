@@ -8,7 +8,7 @@ import com.example.sr1615shrek.entity.model.powerups.TimeReverse;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TeleportVisitor implements Visitor{
+public class PowerUpVisitor implements Visitor{
 
     @Override
     public void collisionWithDoctor(Doctor doctor) {

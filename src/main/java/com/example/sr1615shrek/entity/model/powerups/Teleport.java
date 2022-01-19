@@ -1,6 +1,6 @@
 package com.example.sr1615shrek.entity.model.powerups;
 
-import com.example.sr1615shrek.collisions.visitors.TeleportVisitor;
+import com.example.sr1615shrek.collisions.visitors.PowerUpVisitor;
 import com.example.sr1615shrek.collisions.visitors.Visitor;
 import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.Entity;
@@ -14,18 +14,18 @@ import java.util.Random;
 
 public class Teleport extends StaticEntity implements PowerUp {
 
-    private TeleportVisitor teleportVisitor;
+    private final PowerUpVisitor powerUpVisitor;
 
-    private BehaviorSubject<Teleport> deadTeleportSubject;
+    private final BehaviorSubject<Teleport> deadTeleportSubject;
 
-    private Board board;
+    private final Board board;
 
     public Teleport(Vector2d position,
-                    TeleportVisitor teleportVisitor,
+                    PowerUpVisitor powerUpVisitor,
                     BehaviorSubject<Teleport> deadTeleportSubject,
                     Board board) {
         super(position);
-        this.teleportVisitor = teleportVisitor;
+        this.powerUpVisitor = powerUpVisitor;
         this.deadTeleportSubject = deadTeleportSubject;
         this.board = board;
     }
@@ -55,7 +55,6 @@ public class Teleport extends StaticEntity implements PowerUp {
         return entityList != null && !entityList.isEmpty();
     }
 
-
     @Override
     public void accept(Visitor visitor) {
         visitor.collisionWithTeleport(this);
@@ -63,6 +62,6 @@ public class Teleport extends StaticEntity implements PowerUp {
 
     @Override
     public void collision(Entity entity) {
-        entity.accept(this.teleportVisitor);
+        entity.accept(this.powerUpVisitor);
     }
 }

@@ -1,11 +1,9 @@
 package com.example.sr1615shrek.tests;
 
-import com.example.sr1615shrek.collisions.visitors.DalekVisitor;
-import com.example.sr1615shrek.collisions.visitors.DoctorVisitor;
-import com.example.sr1615shrek.collisions.visitors.JunkVisitor;
 import com.example.sr1615shrek.collisions.visitors.VisitorService;
 import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.Entity;
+import com.example.sr1615shrek.entity.SubjectService;
 import com.example.sr1615shrek.entity.model.Dalek;
 import com.example.sr1615shrek.entity.model.Junk;
 import com.example.sr1615shrek.entity.position.Vector2d;
@@ -16,8 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -25,18 +21,20 @@ public class BoardTest {
 
     private BehaviorSubject<DynamicEntity> entityMoveSubject;
     private BehaviorSubject<Dalek> deadDalekSubject;
-    private VisitorService visitorService;
 
     @Autowired
     private Board board;
 
+    @Autowired
+    private VisitorService visitorService;
+
+    @Autowired
+    private SubjectService subjectService;
+
     @BeforeEach
     void setUp() {
-        this.visitorService = new VisitorService(new DalekVisitor(),
-                new DoctorVisitor(),
-                new JunkVisitor());
-        this.entityMoveSubject = board.getEntityMoveSubject();
-        this.deadDalekSubject = board.getDeadDaleksSubject();
+        this.entityMoveSubject = subjectService.getEntityMoveSubject();
+        this.deadDalekSubject = subjectService.getDeadDaleksSubject();
         this.board.getEntities().forEach(board::removeEntityFromBoard);
     }
 

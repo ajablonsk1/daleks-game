@@ -1,10 +1,9 @@
 package com.example.sr1615shrek.game;
 
-import com.example.sr1615shrek.collisions.visitors.VisitorService;
 import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.Entity;
+import com.example.sr1615shrek.entity.SubjectService;
 import com.example.sr1615shrek.entity.model.Doctor;
-import com.example.sr1615shrek.entity.model.powerups.Teleport;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
@@ -20,17 +19,13 @@ public class Board {
 
     private final int width;
 
-    private final VisitorService visitorService;
-
     private final SubjectService subjectService;
 
     public Board(int width,
                  int height,
-                 VisitorService visitorService,
                  SubjectService subjectService) {
         this.height = height;
         this.width = width;
-        this.visitorService = visitorService;
         this.subjectService = subjectService;
 
         subjectService.getEntityMoveSubject().subscribe(this::onEntityPositionChange);
@@ -49,7 +44,6 @@ public class Board {
         return this.entities.get(vector2d);
     }
 
-    // Adding entity to map
     public void addEntity(Entity entity) {
         this.entities.computeIfAbsent(entity.getPosition(), k -> new LinkedList<>());
 
@@ -67,7 +61,6 @@ public class Board {
         addEntity(dynamicEntity);
     }
 
-    // Removing entity from map
     public void removeEntityFromBoard(Entity entity) {
         entities.get(entity.getPosition()).remove(entity);
     }
@@ -86,10 +79,6 @@ public class Board {
 
     public Doctor getDoctor(){
         return this.doctor;
-    }
-
-    public SubjectService getSubjectService() {
-        return subjectService;
     }
 }
 

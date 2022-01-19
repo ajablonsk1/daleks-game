@@ -13,7 +13,9 @@ import java.util.Optional;
 
 public final class LevelsMapsReader {
 
-    private static final String GET_ENTITY_POSITIONS_SQL_STATEMENT = "SELECT p.position_x AS position_x, p.position_y AS position_y FROM positions AS p INNER JOIN entities e ON p.entity_id = e.entity_id WHERE p.level_id = ? AND p.entity_id = e.entity_id AND e.name = ?";
+    private static final String GET_ENTITY_POSITIONS_SQL_STATEMENT = "SELECT p.position_x AS position_x, p.position_y " +
+            "AS position_y FROM positions AS p INNER JOIN entities e ON p.entity_id = e.entity_id WHERE p.level_id = ? " +
+            "AND p.entity_id = e.entity_id AND e.name = ?";
 
     private static final String POSITION_X_COLUMN = "position_x";
 

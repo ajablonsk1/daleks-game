@@ -3,8 +3,9 @@ package com.example.sr1615shrek.game;
 import com.example.sr1615shrek.collisions.CollisionDetector;
 import com.example.sr1615shrek.collisions.visitors.VisitorService;
 import com.example.sr1615shrek.entity.DynamicEntity;
-import com.example.sr1615shrek.config.database.LevelsMapsReader;
 import com.example.sr1615shrek.entity.Entity;
+import com.example.sr1615shrek.entity.EntityInitializer;
+import com.example.sr1615shrek.entity.SubjectService;
 import com.example.sr1615shrek.entity.model.Dalek;
 import com.example.sr1615shrek.entity.model.Doctor;
 import com.example.sr1615shrek.entity.model.Junk;
@@ -16,13 +17,9 @@ import com.example.sr1615shrek.entity.position.Direction;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import com.example.sr1615shrek.view.BoardPresenter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Random;
-
-//TODO: REFAKTOR XD i testy i git
+import java.util.stream.Stream;
 
 @Component
 public class Engine {
@@ -39,10 +36,7 @@ public class Engine {
 
     private final PowerUpHistory powerUpHistory;
 
-    @Value("${engine.startingDaleksAmount}")
-    private int startingDaleksAmount;
-
-    private final Random random = new Random();
+    private final EntityInitializer entityInitializer;
 
     private int tour = 0;
 
@@ -52,16 +46,16 @@ public class Engine {
                   CollisionDetector collisionDetector,
                   VisitorService visitorService,
                   SubjectService subjectService,
-                  PowerUpHistory powerUpHistory){
+                  PowerUpHistory powerUpHistory,
+                  EntityInitializer entityInitializer){
         this.board = board;
         this.boardPresenter = boardPresenter;
         this.collisionDetector = collisionDetector;
         this.visitorService = visitorService;
         this.subjectService = subjectService;
         this.powerUpHistory = powerUpHistory;
-        this.subjectService.getDeadDaleksSubject().subscribe(this::onDaleksDeath);
-        this.subjectService.getDeadTeleportSubject().subscribe(this::onTeleportDeath);
-        this.subjectService.getDeadTimeReverseSubject().subscribe(this::onTimeReverseDeath);
+        this.entityInitializer = entityInitializer;
+        subscribeSubjects();
     }
 
 
@@ -87,83 +81,28 @@ public class Engine {
         }
     }
 
-    private boolean isVectorOccupied(Vector2d vector2d) {
-        List<Entity> entityList = board.getEntitiesOnVector(vector2d);
-        return entityList != null && !entityList.isEmpty();
-    }
-
-    private Vector2d getRandomVector() {
-        return new Vector2d(
-                random.nextInt(board.getWidth()),
-                random.nextInt(board.getHeight())
-        );
-    }
-
-    private void addEntityToBoardOnRandomPosition(Entity entity) {
-        while(isVectorOccupied(entity.getPosition())) {
-            entity.setPosition(getRandomVector());
-        }
-
-        board.addEntity(entity);
-    }
-
-    private void addDoctorOnPosition(Vector2d position) {
-        Doctor doctor = new Doctor(position,
-                this.subjectService.getEntityMoveSubject(),
-                this.visitorService.getDoctorVisitor());
-        addEntityToBoardOnRandomPosition(doctor);
-        this.board.setDoctor(doctor);
-    }
-
-    private void addDoctorToBoardRandom() {
-        addDoctorOnPosition(getRandomVector());
-    }
-
-    private void addDoctorToBoardFromFile(int levelID) {
-        addDoctorOnPosition(LevelsMapsReader.getDoctorPosition(levelID).get());
-    }
-
-    private void addDaleksToBoardRandom(){
-        for(int i = 0; i < startingDaleksAmount; i++) {
-            addEntityToBoardOnRandomPosition(new Dalek(getRandomVector(),
-                    this.subjectService.getEntityMoveSubject(),
-                    this.subjectService.getDeadDaleksSubject(),
-                    this.visitorService.getDalekVisitor()));
-        }
-    }
-
-    private void addDaleksToBoardFromFile(int levelID) {
-       LevelsMapsReader.getDaleksPositions(levelID).forEach(position -> board.addEntity(new Dalek(position,
-                   this.subjectService.getEntityMoveSubject(),
-                   this.subjectService.getDeadDaleksSubject(),
-                   this.visitorService.getDalekVisitor()))
-       );
-    }
 
     private void updateBoardPresenter() {
         this.boardPresenter.updateMap(this.board.getEntities());
     }
 
     public void startRandom(){
-        addDoctorToBoardRandom();
-        addDaleksToBoardRandom();
+        this.entityInitializer.addDoctorToBoardRandom();
+        this.entityInitializer.addDaleksToBoardRandom();
         updateBoardPresenter();
     }
 
     public void startCampaign(int levelID) {
-        addDoctorToBoardFromFile(levelID);
-        addDaleksToBoardFromFile(levelID);
+        this.entityInitializer.addDoctorToBoardFromDb(levelID);
+        this.entityInitializer.addDaleksToBoardFromDb(levelID);
         updateBoardPresenter();
     }
 
     public void startTurn(Direction direction) {
         this.tour += 1;
         this.board.getDoctor().move(direction);
-        this.board.getEntities()
-                .stream()
-                .filter(Dalek.class::isInstance)
-                .forEach(entity -> ((Dalek) entity).move(this.board.getDoctor().getPosition()));
-        this.spawnPowerUp();
+        getDaleksStream().forEach(entity -> ((Dalek) entity).move(this.board.getDoctor().getPosition()));
+        this.entityInitializer.spawnPowerUp(this.tour);
         this.boardPresenter.updateMap(this.board.getEntities());
 
         this.isGameEnd();
@@ -179,68 +118,64 @@ public class Engine {
     }
 
     private void onTeleportDeath(Teleport teleport){
-        this.board.removeEntityFromBoard(teleport);
+        onPowerUpDeath(teleport);
         this.board.getDoctor().addTeleport(teleport);
-        this.powerUpHistory.push(this.tour, teleport);
     }
 
     private void onTimeReverseDeath(TimeReverse timeReverse){
-        this.board.removeEntityFromBoard(timeReverse);
+        onPowerUpDeath(timeReverse);
         this.board.getDoctor().addTimeReverse(timeReverse);
-        this.powerUpHistory.push(this.tour, timeReverse);
+    }
+
+    private void onPowerUpDeath(PowerUp powerUp){
+        this.board.removeEntityFromBoard(powerUp);
+        this.powerUpHistory.push(this.tour, powerUp);
     }
 
     public void useTimeReverse(){
-        if(!board.getDoctor().getTimeReverseList().isEmpty()){
-            PowerUp timeReverse = this.board.getDoctor().getTimeReverse();
-            this.board.getEntities()
-                    .stream()
-                    .filter(DynamicEntity.class::isInstance)
-                    .forEach(entity -> timeReverse.execute((DynamicEntity) entity));
-            this.board.getDoctor().useTimeReverse();
-            this.powerUpHistory.pop(this.tour--).forEach((powerUp) -> {
-                if(board.getEntities().contains(powerUp)){
-                    this.board.removeEntityFromBoard(powerUp);
-                } else{
-                    this.board.addEntity(powerUp);
-                }
-            });
+        Doctor doctor = this.board.getDoctor();
+        if(!doctor.isTimeReverseListEmpty()){
+
+            PowerUp timeReverse = doctor.getTimeReverse();
+            getDaleksStream().forEach(entity -> timeReverse.execute((DynamicEntity) entity));
+            timeReverse.execute(doctor);
+
+            doctor.removeTimeReverseFromEq();
+            this.powerUpHistory.pop(this.tour--).forEach(this::handleTimeReverseForPowerUps);
         }
         this.boardPresenter.updateMap(this.board.getEntities());
     }
 
-    public void useTeleport(){
+    private void handleTimeReverseForPowerUps(PowerUp powerUp){
+        if(board.getEntities().contains(powerUp)){
+            this.board.removeEntityFromBoard(powerUp);
+        } else{
+            this.board.addEntity(powerUp);
+        }
+    }
 
-        //TODO: XDD zrobic to bo brzydal -> rusza daleki w miejscu zbeby z po teleporcie jkak uzywamy zegarka sie cofnely
-        // w to samo miejsce
-        this.board.getEntities()
-                .stream()
-                .filter(Dalek.class::isInstance)
-                .forEach(entity -> ((Dalek) entity).move(entity.getPosition()));
+    public void useTeleport(){
+        updateDaleksAfterTeleport();
         this.tour += 1;
-        if(!board.getDoctor().getTeleportList().isEmpty()){
+        if(!board.getDoctor().isTeleportListEmpty()){
             board.getDoctor().useTeleport();
         }
         this.boardPresenter.updateMap(this.board.getEntities());
     }
 
-    private void spawnPowerUp(){
-        if(this.tour % 3 == 0){
-            int x = random.nextInt(2);
-            PowerUp powerUp;
-            if(x == 0){
-                powerUp = new Teleport(getRandomVector(),
-                        this.visitorService.getTeleportVisitor(),
-                        this.subjectService.getDeadTeleportSubject(),
-                        this.board);
+    private void updateDaleksAfterTeleport(){
+        getDaleksStream().forEach(dalek -> ((DynamicEntity) dalek).move(dalek.getPosition()));
+    }
 
-            } else{
-                powerUp = new TimeReverse(getRandomVector(),
-                        this.visitorService.getTimeReverseVisitor(),
-                        this.subjectService.getDeadTimeReverseSubject());
-            }
-            addEntityToBoardOnRandomPosition(powerUp);
-            this.powerUpHistory.push(this.tour, powerUp);
-        }
+    private Stream<Entity> getDaleksStream(){
+        return this.board.getEntities()
+                .stream()
+                .filter(Dalek.class::isInstance);
+    }
+
+    private void subscribeSubjects(){
+        this.subjectService.getDeadDaleksSubject().subscribe(this::onDaleksDeath);
+        this.subjectService.getDeadTeleportSubject().subscribe(this::onTeleportDeath);
+        this.subjectService.getDeadTimeReverseSubject().subscribe(this::onTimeReverseDeath);
     }
 }

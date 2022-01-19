@@ -2,10 +2,10 @@ package com.example.sr1615shrek.entity;
 
 import com.example.sr1615shrek.entity.position.Direction;
 import com.example.sr1615shrek.entity.position.Vector2d;
-import com.sun.tools.jconsole.JConsoleContext;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public abstract class DynamicEntity implements Entity {
 
@@ -24,17 +24,12 @@ public abstract class DynamicEntity implements Entity {
     }
 
     public void move(Vector2d vector2d) {
-        lastPosition = position.copy();
-        lastPositions.add(lastPosition);
-        this.position = this.position.add(vector2d);
-        positionSubject.onNext(this);
+        moveOnSpecificPosition(this.position.add(vector2d));
     }
 
     public void moveOnSpecificPosition(Vector2d vector2d) {
-        lastPosition = position.copy();
+        moveTimeReverse(vector2d);
         lastPositions.add(lastPosition);
-        this.position = vector2d;
-        positionSubject.onNext(this);
     }
 
     public void moveTimeReverse(Vector2d vector2d) {

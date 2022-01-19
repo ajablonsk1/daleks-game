@@ -1,13 +1,12 @@
 package com.example.sr1615shrek.config;
 
-import com.example.sr1615shrek.collisions.visitors.VisitorService;
 import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.Entity;
+import com.example.sr1615shrek.entity.SubjectService;
 import com.example.sr1615shrek.entity.model.Dalek;
 import com.example.sr1615shrek.entity.model.powerups.Teleport;
 import com.example.sr1615shrek.entity.model.powerups.TimeReverse;
 import com.example.sr1615shrek.game.Board;
-import com.example.sr1615shrek.game.SubjectService;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -40,11 +39,10 @@ public class AppConfig {
     }
 
     @Bean
-    public Board board(VisitorService visitorService, SubjectService subjectService){
+    public Board board(SubjectService subjectService){
 
         return new Board(width,
                 height,
-                visitorService,
                 subjectService);
     }
 }

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Stack;
 
 @Component
@@ -24,6 +23,9 @@ public class PowerUpHistory {
         Pair<Integer, PowerUp> powerUpPair = historyStack.pop();
         while(tour == powerUpPair.getKey()){
             powerUps.add(powerUpPair.getValue());
+            if(historyStack.empty()){
+                break;
+            }
             powerUpPair = historyStack.pop();
         }
         historyStack.push(powerUpPair);

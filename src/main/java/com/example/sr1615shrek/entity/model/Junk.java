@@ -5,9 +5,6 @@ import com.example.sr1615shrek.collisions.visitors.Visitor;
 import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.StaticEntity;
 import com.example.sr1615shrek.entity.position.Vector2d;
-import javafx.scene.image.Image;
-
-import java.util.Objects;
 
 public class Junk extends StaticEntity {
 

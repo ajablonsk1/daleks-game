@@ -29,7 +29,6 @@ public class AppController {
         this.fxWeaver = fxWeaver;
     }
 
-    // Initializing the board view, which is the actual game view
     public void initBoardView() {
         Parent root = fxWeaver.loadView(BoardPresenter.class);
         Scene scene = new Scene(root);

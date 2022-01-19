@@ -15,13 +15,15 @@ import java.util.List;
 
 public class Doctor extends DynamicEntity {
 
-    private DoctorVisitor doctorVisitor;
+    private final DoctorVisitor doctorVisitor;
 
     private boolean isAlive;
 
-    private List<PowerUp> teleportList = new ArrayList<>();
+    private final List<PowerUp> teleportList = new ArrayList<>();
 
-    private List<PowerUp> timeReverseList = new ArrayList<>();
+    private final List<PowerUp> timeReverseList = new ArrayList<>();
+
+    private final static int FIRST_ELEMENT = 0;
 
     public Doctor(Vector2d position,
                   BehaviorSubject<DynamicEntity> entityMoveSubject,
@@ -37,34 +39,24 @@ public class Doctor extends DynamicEntity {
     }
 
     public void useTeleport(){
-        teleportList.get(0).execute(this);
-        teleportList.remove(0);
+        teleportList.get(FIRST_ELEMENT).execute(this);
+        teleportList.remove(FIRST_ELEMENT);
     }
 
-    public void useTimeReverse(){
-        timeReverseList.remove(0);
-    }
-
-    @Override
-    public void accept(Visitor visitor) {
-        visitor.collisionWithDoctor(this);
-    }
-
-    @Override
-    public void collision(Entity entity) {
-        entity.accept(doctorVisitor);
+    public void removeTimeReverseFromEq(){
+        timeReverseList.remove(FIRST_ELEMENT);
     }
 
     public boolean isAlive() {
         return isAlive;
     }
 
-    public List<PowerUp> getTeleportList() {
-        return teleportList;
+    public boolean isTeleportListEmpty() {
+        return teleportList.isEmpty();
     }
 
-    public List<PowerUp> getTimeReverseList() {
-        return timeReverseList;
+    public boolean isTimeReverseListEmpty() {
+        return timeReverseList.isEmpty();
     }
 
     public void addTeleport(Teleport teleport){
@@ -84,6 +76,20 @@ public class Doctor extends DynamicEntity {
     }
 
     public PowerUp getTimeReverse(){
-        return this.timeReverseList.get(0);
+        return this.timeReverseList.get(FIRST_ELEMENT);
+    }
+
+    public List<PowerUp> getTimeReverseList() {
+        return timeReverseList;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.collisionWithDoctor(this);
+    }
+
+    @Override
+    public void collision(Entity entity) {
+        entity.accept(doctorVisitor);
     }
 }
