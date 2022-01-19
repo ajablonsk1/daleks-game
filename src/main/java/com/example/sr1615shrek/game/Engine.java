@@ -5,15 +5,15 @@ import com.example.sr1615shrek.collisions.visitors.VisitorService;
 import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.config.database.LevelsMapsReader;
 import com.example.sr1615shrek.entity.Entity;
-import com.example.sr1615shrek.entity.StaticEntity;
 import com.example.sr1615shrek.entity.model.Dalek;
 import com.example.sr1615shrek.entity.model.Doctor;
 import com.example.sr1615shrek.entity.model.Junk;
+import com.example.sr1615shrek.entity.model.powerups.PowerUp;
+import com.example.sr1615shrek.entity.model.powerups.PowerUpHistory;
 import com.example.sr1615shrek.entity.model.powerups.Teleport;
 import com.example.sr1615shrek.entity.model.powerups.TimeReverse;
 import com.example.sr1615shrek.entity.position.Direction;
 import com.example.sr1615shrek.entity.position.Vector2d;
-import com.example.sr1615shrek.view.AppController;
 import com.example.sr1615shrek.view.BoardPresenter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +21,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Random;
+
+//TODO: REFAKTOR XD i testy i git
 
 @Component
 public class Engine {
@@ -35,6 +37,8 @@ public class Engine {
 
     private final SubjectService subjectService;
 
+    private final PowerUpHistory powerUpHistory;
+
     @Value("${engine.startingDaleksAmount}")
     private int startingDaleksAmount;
 
@@ -47,12 +51,14 @@ public class Engine {
                   Board board,
                   CollisionDetector collisionDetector,
                   VisitorService visitorService,
-                  SubjectService subjectService){
+                  SubjectService subjectService,
+                  PowerUpHistory powerUpHistory){
         this.board = board;
         this.boardPresenter = boardPresenter;
         this.collisionDetector = collisionDetector;
         this.visitorService = visitorService;
         this.subjectService = subjectService;
+        this.powerUpHistory = powerUpHistory;
         this.subjectService.getDeadDaleksSubject().subscribe(this::onDaleksDeath);
         this.subjectService.getDeadTeleportSubject().subscribe(this::onTeleportDeath);
         this.subjectService.getDeadTimeReverseSubject().subscribe(this::onTimeReverseDeath);
@@ -151,6 +157,7 @@ public class Engine {
     }
 
     public void startTurn(Direction direction) {
+        this.tour += 1;
         this.board.getDoctor().move(direction);
         this.board.getEntities()
                 .stream()
@@ -174,26 +181,43 @@ public class Engine {
     private void onTeleportDeath(Teleport teleport){
         this.board.removeEntityFromBoard(teleport);
         this.board.getDoctor().addTeleport(teleport);
+        this.powerUpHistory.push(this.tour, teleport);
     }
 
     private void onTimeReverseDeath(TimeReverse timeReverse){
         this.board.removeEntityFromBoard(timeReverse);
         this.board.getDoctor().addTimeReverse(timeReverse);
+        this.powerUpHistory.push(this.tour, timeReverse);
     }
 
     public void useTimeReverse(){
         if(!board.getDoctor().getTimeReverseList().isEmpty()){
-            TimeReverse timeReverse = this.board.getDoctor().getTimeReverse();
+            PowerUp timeReverse = this.board.getDoctor().getTimeReverse();
             this.board.getEntities()
                     .stream()
                     .filter(DynamicEntity.class::isInstance)
-                    .forEach(entity -> timeReverse.reverseTime((DynamicEntity) entity));
+                    .forEach(entity -> timeReverse.execute((DynamicEntity) entity));
             this.board.getDoctor().useTimeReverse();
+            this.powerUpHistory.pop(this.tour--).forEach((powerUp) -> {
+                if(board.getEntities().contains(powerUp)){
+                    this.board.removeEntityFromBoard(powerUp);
+                } else{
+                    this.board.addEntity(powerUp);
+                }
+            });
         }
         this.boardPresenter.updateMap(this.board.getEntities());
     }
 
     public void useTeleport(){
+
+        //TODO: XDD zrobic to bo brzydal -> rusza daleki w miejscu zbeby z po teleporcie jkak uzywamy zegarka sie cofnely
+        // w to samo miejsce
+        this.board.getEntities()
+                .stream()
+                .filter(Dalek.class::isInstance)
+                .forEach(entity -> ((Dalek) entity).move(entity.getPosition()));
+        this.tour += 1;
         if(!board.getDoctor().getTeleportList().isEmpty()){
             board.getDoctor().useTeleport();
         }
@@ -201,19 +225,22 @@ public class Engine {
     }
 
     private void spawnPowerUp(){
-        this.tour += 1;
         if(this.tour % 3 == 0){
             int x = random.nextInt(2);
+            PowerUp powerUp;
             if(x == 0){
-                addEntityToBoardOnRandomPosition(new Teleport(getRandomVector(),
+                powerUp = new Teleport(getRandomVector(),
                         this.visitorService.getTeleportVisitor(),
                         this.subjectService.getDeadTeleportSubject(),
-                        this.board));
+                        this.board);
+
             } else{
-                addEntityToBoardOnRandomPosition(new TimeReverse(getRandomVector(),
+                powerUp = new TimeReverse(getRandomVector(),
                         this.visitorService.getTimeReverseVisitor(),
-                        this.subjectService.getDeadTimeReverseSubject()));
+                        this.subjectService.getDeadTimeReverseSubject());
             }
+            addEntityToBoardOnRandomPosition(powerUp);
+            this.powerUpHistory.push(this.tour, powerUp);
         }
     }
 }

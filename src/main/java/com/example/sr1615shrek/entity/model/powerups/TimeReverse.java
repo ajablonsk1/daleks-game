@@ -5,13 +5,10 @@ import com.example.sr1615shrek.collisions.visitors.Visitor;
 import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.StaticEntity;
-import com.example.sr1615shrek.entity.model.Doctor;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
-import javax.print.Doc;
-
-public class TimeReverse extends StaticEntity {
+public class TimeReverse extends StaticEntity implements PowerUp{
 
     private TimeReverseVisitor timeReverseVisitor;
 
@@ -25,9 +22,8 @@ public class TimeReverse extends StaticEntity {
         this.deadTimeReverseSubject = deadTimeReverseSubject;
     }
 
-    public TimeReverse(){}
-
-    public void reverseTime(DynamicEntity dynamicEntity){
+    @Override
+    public void execute(DynamicEntity dynamicEntity){
         if(!dynamicEntity.getLastPositions().isEmpty()){
             Vector2d lastPosition = dynamicEntity.getLastPositions().get(dynamicEntity.getLastPositions().size()-1);
             dynamicEntity.getLastPositions().remove(dynamicEntity.getLastPositions().size()-1);
@@ -35,7 +31,8 @@ public class TimeReverse extends StaticEntity {
         }
     }
 
-    public void passingAway(){
+    @Override
+    public void undo(){
         deadTimeReverseSubject.onNext(this);
     }
 

@@ -3,11 +3,8 @@ package com.example.sr1615shrek.game;
 import com.example.sr1615shrek.collisions.visitors.VisitorService;
 import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.Entity;
-import com.example.sr1615shrek.entity.model.Dalek;
 import com.example.sr1615shrek.entity.model.Doctor;
-import com.example.sr1615shrek.entity.model.Junk;
 import com.example.sr1615shrek.entity.model.powerups.Teleport;
-import com.example.sr1615shrek.entity.model.powerups.TimeReverse;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 

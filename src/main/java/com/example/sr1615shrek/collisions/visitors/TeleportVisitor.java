@@ -5,8 +5,6 @@ import com.example.sr1615shrek.entity.model.Doctor;
 import com.example.sr1615shrek.entity.model.Junk;
 import com.example.sr1615shrek.entity.model.powerups.Teleport;
 import com.example.sr1615shrek.entity.model.powerups.TimeReverse;
-import com.example.sr1615shrek.game.Board;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component

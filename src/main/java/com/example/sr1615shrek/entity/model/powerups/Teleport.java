@@ -2,9 +2,9 @@ package com.example.sr1615shrek.entity.model.powerups;
 
 import com.example.sr1615shrek.collisions.visitors.TeleportVisitor;
 import com.example.sr1615shrek.collisions.visitors.Visitor;
+import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.StaticEntity;
-import com.example.sr1615shrek.entity.model.Doctor;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import com.example.sr1615shrek.game.Board;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
@@ -12,7 +12,7 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import java.util.List;
 import java.util.Random;
 
-public class Teleport extends StaticEntity {
+public class Teleport extends StaticEntity implements PowerUp {
 
     private TeleportVisitor teleportVisitor;
 
@@ -30,13 +30,20 @@ public class Teleport extends StaticEntity {
         this.board = board;
     }
 
-    public Teleport(Board board){
-        this.board = board;
+    @Override
+    public void execute(DynamicEntity doctor){
+        Vector2d newPosition = getRandomVector();
+        while(isVectorOccupied(newPosition)) {
+            newPosition = getRandomVector();
+        }
+        doctor.moveOnSpecificPosition(newPosition);
     }
 
-    public void passingAway(){
+    @Override
+    public void undo(){
         deadTeleportSubject.onNext(this);
     }
+
 
     public Vector2d getRandomVector(){
         Random random = new Random();
@@ -48,13 +55,6 @@ public class Teleport extends StaticEntity {
         return entityList != null && !entityList.isEmpty();
     }
 
-    public void teleport(Doctor doctor){
-        Vector2d newPosition = getRandomVector();
-        while(isVectorOccupied(newPosition)) {
-            newPosition = getRandomVector();
-        }
-        doctor.moveOnSpecificPosition(newPosition);
-    }
 
     @Override
     public void accept(Visitor visitor) {

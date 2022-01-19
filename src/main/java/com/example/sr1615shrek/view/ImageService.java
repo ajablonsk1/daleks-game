@@ -7,8 +7,6 @@ import com.example.sr1615shrek.entity.model.Junk;
 import com.example.sr1615shrek.entity.model.powerups.Teleport;
 import com.example.sr1615shrek.entity.model.powerups.TimeReverse;
 import javafx.scene.image.Image;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;

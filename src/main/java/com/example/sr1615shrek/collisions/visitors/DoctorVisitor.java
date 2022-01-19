@@ -24,11 +24,11 @@ public class DoctorVisitor implements Visitor {
 
     @Override
     public void collisionWithTeleport(Teleport teleport) {
-        teleport.passingAway();
+        teleport.undo();
     }
 
     @Override
     public void collisionWithTimeReverse(TimeReverse timeReverse) {
-        timeReverse.passingAway();
+        timeReverse.undo();
     }
 }
