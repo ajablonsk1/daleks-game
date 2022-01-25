@@ -16,7 +16,9 @@ public class GameInitializer {
     private final DoctorMoveController doctorMoveController;
 
     @Autowired
-    public GameInitializer(AppController appController, Engine engine, DoctorMoveController doctorMoveController) {
+    public GameInitializer(AppController appController,
+                           Engine engine,
+                           DoctorMoveController doctorMoveController) {
         this.appController = appController;
         this.engine = engine;
         this.doctorMoveController = doctorMoveController;

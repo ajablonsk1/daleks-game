@@ -12,6 +12,7 @@ import com.example.sr1615shrek.entity.position.Direction;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import com.example.sr1615shrek.game.Board;
 import com.example.sr1615shrek.game.Engine;
+import com.example.sr1615shrek.game.PositionRandomizer;
 import com.example.sr1615shrek.view.BoardPresenter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,9 @@ public class PowerUpsTest {
     @Autowired
     EntityInitializer entityInitializer;
 
+    @Autowired
+    PositionRandomizer positionRandomizer;
+
     @Mock
     BoardPresenter boardPresenter;
 
@@ -68,7 +72,7 @@ public class PowerUpsTest {
         Teleport teleport = new Teleport(teleportPosition,
                 visitorService.getPowerUpVisitor(),
                 subjectService.getDeadTeleportSubject(),
-                board);
+                positionRandomizer);
         Doctor doctor = new Doctor(new Vector2d(2, 0),
                 subjectService.getEntityMoveSubject(),
                 visitorService.getDoctorVisitor());
