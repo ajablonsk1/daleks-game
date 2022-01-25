@@ -24,15 +24,15 @@ public abstract class DynamicEntity implements Entity {
     }
 
     public void move(Vector2d vector2d) {
-        moveOnSpecificPosition(this.position.add(vector2d));
+        moveOnSpecificPositionAndAddLastPosition(this.position.add(vector2d));
     }
 
-    public void moveOnSpecificPosition(Vector2d vector2d) {
-        moveTimeReverse(vector2d);
+    public void moveOnSpecificPositionAndAddLastPosition(Vector2d vector2d) {
+        moveOnSpecificPosition(vector2d);
         lastPositions.add(lastPosition);
     }
 
-    public void moveTimeReverse(Vector2d vector2d) {
+    public void moveOnSpecificPosition(Vector2d vector2d) {
         lastPosition = position.copy();
         this.position = vector2d;
         positionSubject.onNext(this);
@@ -62,5 +62,13 @@ public abstract class DynamicEntity implements Entity {
 
     public List<Vector2d> getLastPositions() {
         return lastPositions;
+    }
+
+    public void popLastPosition(){
+        if(!this.lastPositions.isEmpty()){
+            Vector2d lastPosition = lastPositions.get(lastPositions.size()-1);
+            this.getLastPositions().remove(lastPositions.size()-1);
+            this.moveOnSpecificPosition(lastPosition);
+        }
     }
 }

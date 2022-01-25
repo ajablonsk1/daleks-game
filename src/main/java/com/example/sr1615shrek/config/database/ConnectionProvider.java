@@ -1,5 +1,7 @@
 package com.example.sr1615shrek.config.database;
 
+import org.springframework.stereotype.Service;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -7,7 +9,9 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 // Code from first classes of Technologie Obiektowe
-public final class ConnectionProvider {
+
+@Service
+public class ConnectionProvider {
 
     private static final String JDBC_DRIVER = "org.sqlite.JDBC";
 
@@ -17,11 +21,11 @@ public final class ConnectionProvider {
 
     private static Optional<Connection> connection = Optional.empty();
 
-    static {
+    public ConnectionProvider() {
         init(JDBC_ADDRESS);
     }
 
-    public static void init(final String jdbcAddress) {
+    public void init(final String jdbcAddress) {
         try {
             close();
             logger.info("Loading driver");
@@ -33,15 +37,11 @@ public final class ConnectionProvider {
         }
     }
 
-    private ConnectionProvider() {
-        throw new UnsupportedOperationException();
-    }
-
-    public static Connection getConnection() {
+    public Connection getConnection() {
         return connection.orElseThrow(() -> new RuntimeException("Connection is not valid."));
     }
 
-    public static void close() throws SQLException {
+    public void close() throws SQLException {
         if (connection.isPresent()) {
             logger.info("Closing connection");
             connection.get().close();

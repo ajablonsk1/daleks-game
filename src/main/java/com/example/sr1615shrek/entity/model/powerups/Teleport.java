@@ -6,11 +6,8 @@ import com.example.sr1615shrek.entity.DynamicEntity;
 import com.example.sr1615shrek.entity.Entity;
 import com.example.sr1615shrek.entity.StaticEntity;
 import com.example.sr1615shrek.entity.position.Vector2d;
-import com.example.sr1615shrek.game.Board;
+import com.example.sr1615shrek.game.PositionRandomizer;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
-
-import java.util.List;
-import java.util.Random;
 
 public class Teleport extends StaticEntity implements PowerUp {
 
@@ -18,42 +15,29 @@ public class Teleport extends StaticEntity implements PowerUp {
 
     private final BehaviorSubject<Teleport> deadTeleportSubject;
 
-    private final Board board;
+    private final PositionRandomizer positionRandomizer;
 
     public Teleport(Vector2d position,
                     PowerUpVisitor powerUpVisitor,
                     BehaviorSubject<Teleport> deadTeleportSubject,
-                    Board board) {
+                    PositionRandomizer positionRandomizer) {
         super(position);
         this.powerUpVisitor = powerUpVisitor;
         this.deadTeleportSubject = deadTeleportSubject;
-        this.board = board;
+        this.positionRandomizer = positionRandomizer;
     }
 
     @Override
     public void execute(DynamicEntity doctor){
-        Vector2d newPosition = getRandomVector();
-        while(isVectorOccupied(newPosition)) {
-            newPosition = getRandomVector();
-        }
-        doctor.moveOnSpecificPosition(newPosition);
+        Vector2d newPosition = this.positionRandomizer.getRandomPosition();
+        doctor.moveOnSpecificPositionAndAddLastPosition(newPosition);
     }
 
     @Override
-    public void undo(){
+    public void onPowerUpPickUp(){
         deadTeleportSubject.onNext(this);
     }
 
-
-    public Vector2d getRandomVector(){
-        Random random = new Random();
-        return new Vector2d(random.nextInt(this.board.getWidth()), random.nextInt(this.board.getHeight()));
-    }
-
-    private boolean isVectorOccupied(Vector2d vector2d) {
-        List<Entity> entityList = board.getEntitiesOnVector(vector2d);
-        return entityList != null && !entityList.isEmpty();
-    }
 
     @Override
     public void accept(Visitor visitor) {

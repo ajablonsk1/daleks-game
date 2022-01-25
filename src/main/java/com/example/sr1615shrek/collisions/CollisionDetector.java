@@ -34,13 +34,11 @@ public class CollisionDetector {
         }
     }
 
-    // Calling the collision function in entity to solve the collision
     private void solveDetectedCollision(Entity firstEntity, Entity secondEntity){
         firstEntity.collision(secondEntity);
         secondEntity.collision(firstEntity);
     }
 
-    // Checking if entities didn't go off the map
     private boolean detectEntityOffTheMap(Vector2d entityPosition){
         return entityPosition.getX() < 0
                 || entityPosition.getY() < 0

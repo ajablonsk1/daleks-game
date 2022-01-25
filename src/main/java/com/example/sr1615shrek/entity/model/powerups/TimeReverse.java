@@ -8,8 +8,6 @@ import com.example.sr1615shrek.entity.StaticEntity;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
-import java.util.List;
-
 public class TimeReverse extends StaticEntity implements PowerUp{
 
     private final PowerUpVisitor powerUpVisitor;
@@ -26,16 +24,11 @@ public class TimeReverse extends StaticEntity implements PowerUp{
 
     @Override
     public void execute(DynamicEntity dynamicEntity){
-        List<Vector2d> lastPositions = dynamicEntity.getLastPositions();
-        if(!lastPositions.isEmpty()){
-            Vector2d lastPosition = lastPositions.get(lastPositions.size()-1);
-            dynamicEntity.getLastPositions().remove(lastPositions.size()-1);
-            dynamicEntity.moveTimeReverse(lastPosition);
-        }
+        dynamicEntity.popLastPosition();
     }
 
     @Override
-    public void undo(){
+    public void onPowerUpPickUp(){
         deadTimeReverseSubject.onNext(this);
     }
 

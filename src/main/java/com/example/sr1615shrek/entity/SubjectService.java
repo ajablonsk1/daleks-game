@@ -19,7 +19,6 @@ public class SubjectService {
 
     private final BehaviorSubject<TimeReverse> deadTimeReverseSubject;
 
-
     public SubjectService(BehaviorSubject<List<Entity>> collisionSubject,
                           BehaviorSubject<DynamicEntity> entityMoveSubject,
                           BehaviorSubject<Dalek> deadDaleksSubject,

@@ -21,12 +21,17 @@ public class Board {
 
     private final SubjectService subjectService;
 
+    private List<Vector2d> freePositions = new ArrayList<>();
+
+    private final Random random;
+
     public Board(int width,
                  int height,
                  SubjectService subjectService) {
         this.height = height;
         this.width = width;
         this.subjectService = subjectService;
+        this.random = new Random();
 
         subjectService.getEntityMoveSubject().subscribe(this::onEntityPositionChange);
 

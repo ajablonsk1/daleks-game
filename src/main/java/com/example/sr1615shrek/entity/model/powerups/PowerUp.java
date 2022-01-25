@@ -7,5 +7,5 @@ public interface PowerUp extends Entity {
 
     void execute(DynamicEntity dynamicEntity);
 
-    void undo();
+    void onPowerUpPickUp();
 }

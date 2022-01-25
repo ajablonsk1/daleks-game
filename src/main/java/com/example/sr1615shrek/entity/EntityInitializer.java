@@ -10,11 +10,11 @@ import com.example.sr1615shrek.entity.model.powerups.Teleport;
 import com.example.sr1615shrek.entity.model.powerups.TimeReverse;
 import com.example.sr1615shrek.entity.position.Vector2d;
 import com.example.sr1615shrek.game.Board;
+import com.example.sr1615shrek.game.PositionRandomizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Random;
 
 @Component
@@ -30,6 +30,10 @@ public class EntityInitializer {
 
     private final Random random;
 
+    private final LevelsMapsReader levelsMapsReader;
+
+    private final PositionRandomizer positionRandomizer;
+
     @Value("${entityInitializer.startingDaleksAmount}")
     private int startingDaleksAmount;
 
@@ -40,12 +44,16 @@ public class EntityInitializer {
     public EntityInitializer(Board board,
                              SubjectService subjectService,
                              VisitorService visitorService,
-                             PowerUpHistory powerUpHistory){
+                             PowerUpHistory powerUpHistory,
+                             LevelsMapsReader levelsMapsReader,
+                             PositionRandomizer positionRandomizer){
         this.board = board;
         this.subjectService = subjectService;
         this.visitorService = visitorService;
         this.powerUpHistory = powerUpHistory;
         this.random = new Random();
+        this.levelsMapsReader = levelsMapsReader;
+        this.positionRandomizer = positionRandomizer;
     }
 
     public void spawnPowerUp(int tour){
@@ -53,12 +61,12 @@ public class EntityInitializer {
             int x = random.nextInt(2);
             PowerUp powerUp;
             if (x == 0) {
-                powerUp = new Teleport(getRandomVector(),
+                powerUp = new Teleport(this.positionRandomizer.getRandomPosition(),
                         this.visitorService.getPowerUpVisitor(),
                         this.subjectService.getDeadTeleportSubject(),
-                        this.board);
+                        this.positionRandomizer);
             } else {
-                powerUp = new TimeReverse(getRandomVector(),
+                powerUp = new TimeReverse(this.positionRandomizer.getRandomPosition(),
                         this.visitorService.getPowerUpVisitor(),
                         this.subjectService.getDeadTimeReverseSubject());
             }
@@ -69,23 +77,8 @@ public class EntityInitializer {
         }
     }
 
-    private boolean isVectorOccupied(Vector2d vector2d) {
-        List<Entity> entityList = board.getEntitiesOnVector(vector2d);
-        return entityList != null && !entityList.isEmpty();
-    }
-
-    private Vector2d getRandomVector() {
-        return new Vector2d(
-                random.nextInt(board.getWidth()),
-                random.nextInt(board.getHeight())
-        );
-    }
-
     private void addEntityToBoardOnRandomPosition(Entity entity) {
-        while(isVectorOccupied(entity.getPosition())) {
-            entity.setPosition(getRandomVector());
-        }
-
+        entity.setPosition(this.positionRandomizer.getRandomPosition());
         board.addEntity(entity);
     }
 
@@ -98,27 +91,28 @@ public class EntityInitializer {
     }
 
     public void addDoctorToBoardRandom() {
-        addDoctorOnPosition(getRandomVector());
+        addDoctorOnPosition(this.positionRandomizer.getRandomPosition());
     }
 
     public void addDoctorToBoardFromDb(int levelID) {
-        addDoctorOnPosition(LevelsMapsReader.getDoctorPosition(levelID).get());
+        addDoctorOnPosition(levelsMapsReader.getDoctorPosition(levelID).get());
     }
 
     public void addDaleksToBoardRandom(){
         for(int i = 0; i < startingDaleksAmount; i++) {
-            addEntityToBoardOnRandomPosition(new Dalek(getRandomVector(),
-                    this.subjectService.getEntityMoveSubject(),
-                    this.subjectService.getDeadDaleksSubject(),
-                    this.visitorService.getDalekVisitor()));
+            addEntityToBoardOnRandomPosition(createDalekOnPosition(this.positionRandomizer.getRandomPosition()));
         }
     }
 
     public void addDaleksToBoardFromDb(int levelID) {
-        LevelsMapsReader.getDaleksPositions(levelID).forEach(position -> board.addEntity(new Dalek(position,
+        levelsMapsReader.getDaleksPositions(levelID)
+                .forEach(position -> board.addEntity(createDalekOnPosition(position)));
+    }
+
+    private Dalek createDalekOnPosition(Vector2d position){
+        return new Dalek(position,
                 this.subjectService.getEntityMoveSubject(),
                 this.subjectService.getDeadDaleksSubject(),
-                this.visitorService.getDalekVisitor()))
-        );
+                this.visitorService.getDalekVisitor());
     }
 }
