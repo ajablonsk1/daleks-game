@@ -31,6 +31,7 @@ Dalek’s Game is a Java project for Object-Oriented Technologies classes. The g
 ## Implemented design patterns
 * Visitor 
 * Command
+* Model-view-presenter
 
 ## Technologies and design patterns usage examples
 ### BehaviorSubject (RXJava)
@@ -40,7 +41,7 @@ In Engine class subscribe to the method onTeleportDeath.
 ```Java
 this.subjectService.getDeadTeleportSubject().subscribe(this::onTeleportDeath);
 ```
-Every time power-up is picked up, we call our Subject’s onNext and onTeleportDeath method is automatically called.
+Every time power-up is picked up, we call our Subject’s `onNext(this)` and `onTeleportDeath(Teleport)` method is automatically called.
 ```Java
 @Override
 public void onPowerUpPickUp(){
@@ -64,6 +65,11 @@ Visitor pattern is used to solve entities collision problem.
 PowerUp interface and PowerUpHistory implements Command pattern, which allows us to track the history of used power-ups.
 
 ![command](images/package-powerups.png)
+
+### Model-view-presenter
+In BoardPresenter class we use `updateMap(List<Entity>)` method to update Board view after the end of the tour.
+
+![mvp](images/mvp.png)
 
 ### IoC (Spring)
 
