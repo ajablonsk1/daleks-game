@@ -14,9 +14,10 @@
     - [Game mode](#game-mode)
     - [Doctor movement](#doctor-movement)
     - [Power-ups](#power-ups)
+  - [Collaborators](#collaborators)
 
 ## Description
-Dalek’s Game is a Java project for Object-Oriented Technologies classes. The goal of the game is to survive and eliminate Daleks (who are the enemies) from the board. Each time the main character (Doctor) moves, every Dalek follows him. When a Dalek bumps into another Dalek or junk, it becomes junk. When there is no Dalek left on the map, Doctor wins.
+Dalek’s Game is a Java project for Object-Oriented Technologies classes. The goal of the game is to survive and eliminate Daleks (who are the enemies) from the board. Each time the main character (Doctor, which in our case was represented by Shrek graphic) moves, every Dalek follows him. When a Dalek bumps into another Dalek or junk, it becomes junk. When there is no Dalek left on the map, Doctor wins.
 
 ![game](images/game.png)
 
@@ -108,5 +109,10 @@ When you collect a power-up, you can use it any time, by clicking:
 * T - to use Teleport
 * R - to use Time Reverse
 
+## Collaborators
+* Piotr Płoszczyca
+* Damian Cyper
+* Meciej Zieliński
+* Adrian Jabłoński
 
 
